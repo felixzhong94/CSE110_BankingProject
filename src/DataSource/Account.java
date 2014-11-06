@@ -1,5 +1,9 @@
 package DataSource;
+import java.sql.Connection;
 import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.text.*;
 
 
@@ -13,24 +17,14 @@ public abstract class Account {
 	
 	int accountNo = 0; 
 	double balance = 0.0;
-	String first = "", last = "", middle = "";
-	String address = "", loginID , pin = "";
+	String  loginID ;
 	int accountType ;
 	Date createDate,timeStamp;
-	String gender ="";
-	
+	private java.sql.Timestamp date = new java.sql.Timestamp(new java.util.Date().getTime());
 	public Account() {}
 	
 	public Account (Account original) {
-
-		first = original.first;
-		middle = original.middle;
-		last = original.last;
-		
-		address = original.address;
-		loginID = original.loginID;
-		pin = original.pin;
-		
+		loginID = original.loginID;	
 		accountType = original.accountType;
 		accountNo = original.accountNo;
 		balance = original.balance;
@@ -45,38 +39,6 @@ public abstract class Account {
 //		this.stringToFields(input);
 //		
 //	}
-
-	protected void stringToFields (String input) {
-		int x = 0;
-		int y = 0;
-		
-		for(;input.charAt(x) != '\n'; x++){}
-		first = input.substring(y, x-1);
-		y = x++;
-		
-		for(;input.charAt(x) != '\n'; x++){}
-		if(y == x)
-			middle = "";
-		else
-			middle = input.substring(y, x-1);
-		y = x++;
-		
-		for(;input.charAt(x) != '\n'; x++){}
-		last = input.substring(y, x-1);
-		y = x++;
-		
-		for(;input.charAt(x) != '\n'; x++){}
-		address = input.substring(y, x-1);
-		y = x++;
-		
-//		for(;input.charAt(x) != '\n'; x++){}
-//		loginID = input.substring(y, x-1);
-//		y = x++;
-//		
-//		for(;input.charAt(x) != '\n'; x++){}
-//		pin = input.substring(y, x-1);
-//		y = x++;
-	}
 
 	public int getAccountNo () {
 		return accountNo;
@@ -136,5 +98,47 @@ public abstract class Account {
 		
 		timeStamp= date;
 	}
+	public void update(Connection conn){
+		
+			String query = "UPDATE Account SET AccountType = ?, Balance = ?, timeStamp=? WHERE AccountNo = ? ";
+			PreparedStatement preparedStmt;
+			try {
+				preparedStmt = conn.prepareStatement(query);
+				preparedStmt.setInt(1,this.getAccountType());
+				preparedStmt.setDouble(2,this.getBalance ());
+				preparedStmt.setTimestamp(3, this.date);
+				preparedStmt.setInt(4,this.getAccountNo());
+				preparedStmt.executeUpdate();
+				preparedStmt.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+		
+	}
+	public void create(Connection conn) {
+		String query = " insert into Account (UserLoginID,AccountNo, AccountType, Balance, OpenDate,timeStamp)"
+	       + " values (?, ?, ?, ?, ?,?)";
+		PreparedStatement preparedStmt;
+		try {
+			preparedStmt = conn.prepareStatement(query);
+			System.out.println(this.getLoginID());
+			preparedStmt.setString (1, this.getLoginID());
+			preparedStmt.setInt (2, this.getAccountNo());
+			preparedStmt.setInt  (3, this.getAccountType());
+			preparedStmt.setDouble(4, this.getBalance ());
+			preparedStmt.setTimestamp(5, this.date);
+			preparedStmt.setTimestamp(6, this.date);
+			preparedStmt.setTimestamp(7, null);
+			preparedStmt.execute();
+			preparedStmt.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+
 
 }

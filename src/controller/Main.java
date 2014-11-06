@@ -1,23 +1,22 @@
 package controller;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
+
 import DataSource.*;
+
 import java.security.NoSuchProviderException;
 import java.sql.SQLException;
-
 import java.util.Scanner;
 
 public class Main {
 	 public static void main(String[] args) throws SQLException, GeneralSecurityException, NoSuchProviderException, IOException {
 		 SQL sql = new SQL();
 		 EmailSender sender=new EmailSender();
-		 SQLQueries query = new SQLQueries();
 		 Password password =new Password();
 		 ErrorChecking checking =new ErrorChecking();
 		 LoginController login = new LoginController();
-		 RegistrationController registration = new RegistrationController();
-		  
 		 Account newAccount=null;
+		 RegistrationController registration = new RegistrationController(); 
 		 User newUser =new User();
 		 Scanner in = new Scanner(System.in);
 		 boolean validOption=true;
@@ -26,13 +25,14 @@ public class Main {
 			 System.out.println("Input 1 for login in, 2 for register,3 for sending you an email");
 			 String choice = in.nextLine();
 			 if(Integer.parseInt(choice)==1){
-			 boolean  flag =false;
-			 	do{
-			 		sql.DbConnector();
-			 		flag = login.loginController(newUser,password,query.LOGIN_CHECKING(), sql); 
-			 	}while(flag==false);
 			 
-			 }
+			 	do{
+			 		newUser = login.loginController(newUser,password, sql); 
+			 		
+			 	}while(newUser==null);
+
+
+		   }
 		 
 			 else if(Integer.parseInt(choice)==2){
 			 
@@ -57,9 +57,9 @@ public class Main {
 						 newUser = registration.Registration(newUser,password,checking);
 						 newAccount.setAccountNo(newAccount.accountNoGenerator());
 						 newAccount.setLoginID(newUser.getLoginID());
-						 sql.DbConnector();
-						 sql.createUser(newUser,query.InsertUserQuery());
-						 sql.createAccount(newAccount,query.InsertAccountQuery());
+						 newAccount.update(sql.DbConnector());
+						 newUser.update(sql.DbConnector());
+						 sql.DbConnector().close();
 						 sender.send(newUser.getEmail(),"Congratulation, registration completed","Registration Confirmation");
 						 System.out.println("Registration completed, an email has been sent to your email address");
 					 }catch (com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException a){

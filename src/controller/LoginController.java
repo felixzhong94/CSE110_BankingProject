@@ -4,42 +4,43 @@ import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.sql.SQLException;
-
 import java.util.Scanner;
 
 import DataSource.User;
 
 public class LoginController {
-	public 	boolean loginController(User user,Password password,String query,SQL sql) throws NoSuchAlgorithmException, NoSuchProviderException, UnsupportedEncodingException, SQLException{
+	public 	User loginController(User user,Password password,SQL sql) throws NoSuchAlgorithmException, NoSuchProviderException, UnsupportedEncodingException, SQLException{
 			Scanner in = new Scanner(System.in);
+			boolean login=false;
 			 System.out.println("Please enter your Login ID:");
 			 user.setLoginID(in.nextLine());
 			 System.out.println("Please enter your PassWord:");
 			 user.setPassword (password.passwordConvertor(in.nextLine()));
-			 User loginUser =sql.LoginCheck(user,query);
-			 if(loginUser != null){
-					 System.out.println(loginUser.getLoginID());
-					 System.out.println(loginUser.getPassword());
-					 System.out.println(loginUser.getAddress());
-					 System.out.println(loginUser.getFirst());
-					 System.out.println(loginUser.getMiddle());
-					 System.out.println(loginUser.getLast());
-					 System.out.println(loginUser.getGender());
-					 System.out.println(loginUser.getEmail());
-					 System.out.println(loginUser.getPassword());
-					 System.out.println(loginUser.getPhone());
-					 System.out.println(loginUser.getState());
-					 System.out.println(loginUser.getZip());
-					 System.out.println(loginUser.getSocialSecurity ());
-					 System.out.println(loginUser.getDOB ());
-					 System.out.println(loginUser.getCreateDate ());
-					 System.out.println(loginUser.getTimeStamp ());
-					 return true;
+			 login =user.view(sql.DbConnector());
+			 if(login== true){
+					 System.out.println(user.getLoginID());
+					 System.out.println(user.getPassword());
+					 System.out.println(user.getAddress());
+					 System.out.println(user.getFirst());
+					 System.out.println(user.getMiddle());
+					 System.out.println(user.getLast());
+					 System.out.println(user.getGender());
+					 System.out.println(user.getEmail());
+					 System.out.println(user.getPassword());
+					 System.out.println(user.getPhone());
+					 System.out.println(user.getState());
+					 System.out.println(user.getZip());
+					 System.out.println(user.getSocialSecurity ());
+					 System.out.println(user.getDOB ());
+					 System.out.println(user.getCreateDate ());
+					 System.out.println(user.getTimeStamp ());
+					 return user;
 			 }
 			 else{
 				 System.out.println("User doesn't exist");
-				 return false;
+				 return null;
 			 }
+			 sql.DbConnector().close();
 			 
 		}
 }

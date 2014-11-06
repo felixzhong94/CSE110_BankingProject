@@ -11,7 +11,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 
-public class User {
+public class User implements AccountHolder{
 	String first,middle,last,address,loginID,password,gender;
 	String email,phone,cell,country,state,zip,socialSecurity;
 	Date createDate, timeStamp,DOB;
@@ -49,18 +49,23 @@ public class User {
 	public void setAddress (String input) {
 		address = input;
 	}
+	
+	@Override
 	public String getLoginID () {
 		return loginID;
 	}
 	
+	@Override
 	public void setLoginID (String input) {
 		loginID = input;
 	}
 	
+	@Override
 	public String getPassword () {
 		return password;
 	}
 	
+	@Override
 	public void setPassword (String input) {
 		password = input;
 	}
@@ -136,28 +141,40 @@ public class User {
 	public void setDOB (Date date) {
 		DOB = date;
 	}
+	
+	@Override
 	public Date getCreateDate () {
 		return createDate;
 	}
 	
+	@Override
 	public void setcreateDate (Date date)  {
 		
 		createDate= date;
 	}
+	
+	@Override
 	public Date getTimeStamp () {
 		return timeStamp;
 	}
 	
+	@Override
 	public void setTimeStamp (Date date)  {
 		
 		timeStamp= date;
 	}
+	
+	@Override
 	public void setAccounts(ArrayList<Account> accounts){
 		this.accounts =accounts;
 	}
+	
+	@Override
 	public ArrayList<Account> getAccounts(){
 		return accounts;
 	}
+	
+	@Override
 	public boolean update(Connection conn){
 	
 		String query = "UPDATE User SET FirstName = ?, MiddleName = ?, LastName=?,Address = ?, Password= ?,TimeStamp=?,Gender=?,Email=?,Phone=?,Cell=?,Country=?,State=?,ZipCode=? ,SocialSecurity=?,,DateOfBirth=?WHERE  LoginID = ? AND Password =? ";
@@ -188,8 +205,10 @@ public class User {
 			e.printStackTrace();
 			return false;
 		}
-		return true;
+		return true;	
 	}
+	
+	@Override
 	public boolean create(Connection conn){
 		String query = " insert into User (FirstName,MiddleName, LastName,Address, LoginID,Password,CreateDate,TimeStamp,Gender,Email,Phone,Cell,Country,State,ZipCode,SocialSecurity,DateOfBirth)"
 	       + " values (?, ?, ?, ?, ?,?, ?,?,?, ?, ?, ?, ?,?, ?,?,?)";
@@ -223,7 +242,7 @@ public class User {
 		return true;	
 	}
 	
-	
+	@Override
 	public boolean view(Connection conn){
 		String query = "select * from User where LoginID = ? and Password =?";
 		PreparedStatement statement;
@@ -263,6 +282,8 @@ public class User {
 	        return true;
 
 	}
+	
+	@Override
 	public int viewAccount(Connection conn){
 		String query="select * from Account where LoginID = ?";
 		PreparedStatement statement;

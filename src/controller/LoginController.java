@@ -34,13 +34,14 @@ public class LoginController {
 					 System.out.println(user.getDOB ());
 					 System.out.println(user.getCreateDate ());
 					 System.out.println(user.getTimeStamp ());
+					 sql.DbConnector().close();
 					 return user;
 			 }
 			 else{
 				 System.out.println("User doesn't exist");
+				 sql.DbConnector().close();
 				 return null;
 			 }
-			 sql.DbConnector().close();
 			 
 		}
 }

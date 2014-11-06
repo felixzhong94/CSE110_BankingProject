@@ -3,6 +3,7 @@ package controller;
 import java.sql.SQLException;
 
 import DataSource.*;
+import DataSource.User;
 
 public class AccountController {
 	public void control(User newUser,SQL sql) throws SQLException{

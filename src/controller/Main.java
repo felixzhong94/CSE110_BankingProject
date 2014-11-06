@@ -3,6 +3,7 @@ import java.io.IOException;
 import java.security.GeneralSecurityException;
 
 import DataSource.*;
+import DataSource.User;
 
 import java.security.NoSuchProviderException;
 import java.sql.SQLException;

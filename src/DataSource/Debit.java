@@ -138,5 +138,16 @@ public class Debit implements Account {
 		}
 
 	}
-
+	public boolean checkBalance(double amount){
+		return balance >=amount;
+	}
+	public double credit(double amount){
+		balance = balance +amount;
+		return balance;
+	}
+	public double debit(double amount){
+		balance = balance -amount;
+		return amount;
+		
+	}
 }

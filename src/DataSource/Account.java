@@ -27,6 +27,9 @@ public interface Account {
 	
 	public void update(Connection conn);
 	public void create(Connection conn);
+	public boolean checkBalance(double amount);
+	public double credit(double amount);
+	public double debit(double amount);
 
 }
 

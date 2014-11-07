@@ -7,6 +7,7 @@ public class ErrorChecking {
 	private static final String FIVE_DIGITS_PATTERN="\\d{5}";
 	private static final String EMAIL_PATTERN=".*[@].*";
 	private static final String TWELVE_DIGITS_PATTERN="\\d{0,12}";
+    
 
 	public String getLOGIN_PATTERN(){
 		return LOGIN_PATTERN;

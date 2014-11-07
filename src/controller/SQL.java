@@ -18,8 +18,8 @@ import java.util.ArrayList;
 
 public class SQL {
 	private static final String DRIVER_NAME ="com.mysql.jdbc.Driver";
-	private static final String DB_ADDRESS ="jdbc:mysql://us-cdbr-iron-east-01.cleardb.net/ad_7435525978ed9df";
-	private static final String LOGIN_INFO= "?user=bf42eb7b32d79e&password=d1068231";
+	private static final String DB_ADDRESS ="jdbc:mysql://db4free.net/banckaccount";
+	private static final String LOGIN_INFO= "?user=bzzchj11&password=bzzchj11";
 	private Connection conn=null;
 	public Connection DbConnector() throws SQLException{
 		try {

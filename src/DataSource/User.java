@@ -11,11 +11,11 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 
-public class User implements AccountHolder{
+public class User {
 	String first,middle,last,address,loginID,password,gender;
 	String email,phone,cell,country,state,zip,socialSecurity;
 	Date createDate, timeStamp,DOB;
-	ArrayList<Account> accounts;
+	private ArrayList<Account> accounts=new ArrayList<Account>();
 	private java.sql.Timestamp date = new java.sql.Timestamp(new java.util.Date().getTime());
 	
 	public String getFirst () {
@@ -49,23 +49,18 @@ public class User implements AccountHolder{
 	public void setAddress (String input) {
 		address = input;
 	}
-	
-	@Override
 	public String getLoginID () {
 		return loginID;
 	}
 	
-	@Override
 	public void setLoginID (String input) {
 		loginID = input;
 	}
 	
-	@Override
 	public String getPassword () {
 		return password;
 	}
 	
-	@Override
 	public void setPassword (String input) {
 		password = input;
 	}
@@ -141,43 +136,31 @@ public class User implements AccountHolder{
 	public void setDOB (Date date) {
 		DOB = date;
 	}
-	
-	@Override
 	public Date getCreateDate () {
 		return createDate;
 	}
 	
-	@Override
 	public void setcreateDate (Date date)  {
 		
 		createDate= date;
 	}
-	
-	@Override
 	public Date getTimeStamp () {
 		return timeStamp;
 	}
 	
-	@Override
 	public void setTimeStamp (Date date)  {
 		
 		timeStamp= date;
 	}
-	
-	@Override
 	public void setAccounts(ArrayList<Account> accounts){
 		this.accounts =accounts;
 	}
-	
-	@Override
 	public ArrayList<Account> getAccounts(){
 		return accounts;
 	}
-	
-	@Override
 	public boolean update(Connection conn){
 	
-		String query = "UPDATE User SET FirstName = ?, MiddleName = ?, LastName=?,Address = ?, Password= ?,TimeStamp=?,Gender=?,Email=?,Phone=?,Cell=?,Country=?,State=?,ZipCode=? ,SocialSecurity=?,,DateOfBirth=?WHERE  LoginID = ? AND Password =? ";
+		String query = "UPDATE User SET FirstName = ?, MiddleName = ?, LastName=?,Address = ?, Password= ?,TimeStamp=?,Gender=?,Email=?,Phone=?,Cell=?,Country=?,State=?,ZipCode=? ,SocialSecurity=?,DateOfBirth=?WHERE  LoginID = ? AND Password =? ";
 		PreparedStatement preparedStmt;
 		try {
 			preparedStmt = conn.prepareStatement(query);
@@ -197,7 +180,7 @@ public class User implements AccountHolder{
 			preparedStmt.setString(14, this.getSocialSecurity());
 			preparedStmt.setDate(15,this.getDOB());
 			preparedStmt.setString(16,this.getLoginID());
-			preparedStmt.setString(157,this.getPassword());
+			preparedStmt.setString(17,this.getPassword());
 			preparedStmt.execute();
 			preparedStmt.close();
 		} catch (SQLException e) {
@@ -205,10 +188,8 @@ public class User implements AccountHolder{
 			e.printStackTrace();
 			return false;
 		}
-		return true;	
+		return true;
 	}
-	
-	@Override
 	public boolean create(Connection conn){
 		String query = " insert into User (FirstName,MiddleName, LastName,Address, LoginID,Password,CreateDate,TimeStamp,Gender,Email,Phone,Cell,Country,State,ZipCode,SocialSecurity,DateOfBirth)"
 	       + " values (?, ?, ?, ?, ?,?, ?,?,?, ?, ?, ?, ?,?, ?,?,?)";
@@ -233,16 +214,17 @@ public class User implements AccountHolder{
 			preparedStmt.setString(16, this.getSocialSecurity());
 			preparedStmt.setDate(17,this.getDOB());
 			preparedStmt.execute();
+
 			preparedStmt.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.err.println("Login ID has been registered");
 			return false;
 		}
 		return true;	
 	}
 	
-	@Override
+	
 	public boolean view(Connection conn){
 		String query = "select * from User where LoginID = ? and Password =?";
 		PreparedStatement statement;
@@ -269,23 +251,25 @@ public class User implements AccountHolder{
 		        this.setZip( table.getString("ZipCode"));
 		        this.setSocialSecurity( table.getString("SocialSecurity"));
 		        this.setDOB (table.getDate("DateOfBirth"));
+		        System.out.println("1");
+		        return true;
 			}
 			else{
+				System.out.println("2");
 				return false;
 			}
 			}catch (SQLException e) {
 			// TODO Auto-generated catch block
+				System.out.println("3");
 			e.printStackTrace();
 			return false;
 			}    
 
-	        return true;
+	        
 
 	}
-	
-	@Override
 	public int viewAccount(Connection conn){
-		String query="select * from Account where LoginID = ?";
+		String query="select * from Account where UserLoginID = ?";
 		PreparedStatement statement;
 		try {
 			statement = conn.prepareStatement(query);
@@ -314,8 +298,16 @@ public class User implements AccountHolder{
 			return 0;
 			}    
 
-	        return accounts.size();
+			return accounts.size();
 		
+	}
+	public ArrayList<Account> getUserAccounts(){
+		
+		return accounts;
+		
+	}
+	public void accountsCleaner(){
+		accounts.clear();
 	}
 }
 

@@ -129,7 +129,6 @@ public class Credit implements Account {
 			preparedStmt.setDouble(4, this.getBalance ());
 			preparedStmt.setTimestamp(5, this.date);
 			preparedStmt.setTimestamp(6, this.date);
-			preparedStmt.setTimestamp(7, null);
 			preparedStmt.execute();
 			preparedStmt.close();
 		} catch (SQLException e) {
@@ -137,5 +136,17 @@ public class Credit implements Account {
 			e.printStackTrace();
 		}
 
+	}
+	public boolean checkBalance(double amount){
+		return balance >=amount;
+	}
+	public double credit(double amount){
+		balance = balance +amount;
+		return balance;
+	}
+	public double debit(double amount){
+		balance = balance -amount;
+		return amount;
+		
 	}
 }	

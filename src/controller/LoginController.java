@@ -9,7 +9,7 @@ import java.util.Scanner;
 import DataSource.User;
 
 public class LoginController {
-	public 	User loginController(User user,Password password,SQL sql) throws NoSuchAlgorithmException, NoSuchProviderException, UnsupportedEncodingException, SQLException{
+	public 	boolean loginController(User user,Password password,SQL sql) throws NoSuchAlgorithmException, NoSuchProviderException, UnsupportedEncodingException, SQLException{
 			Scanner in = new Scanner(System.in);
 			boolean login=false;
 			 System.out.println("Please enter your Login ID:");
@@ -17,30 +17,13 @@ public class LoginController {
 			 System.out.println("Please enter your PassWord:");
 			 user.setPassword (password.passwordConvertor(in.nextLine()));
 			 login =user.view(sql.DbConnector());
+			 
 			 if(login== true){
-					 System.out.println(user.getLoginID());
-					 System.out.println(user.getPassword());
-					 System.out.println(user.getAddress());
-					 System.out.println(user.getFirst());
-					 System.out.println(user.getMiddle());
-					 System.out.println(user.getLast());
-					 System.out.println(user.getGender());
-					 System.out.println(user.getEmail());
-					 System.out.println(user.getPassword());
-					 System.out.println(user.getPhone());
-					 System.out.println(user.getState());
-					 System.out.println(user.getZip());
-					 System.out.println(user.getSocialSecurity ());
-					 System.out.println(user.getDOB ());
-					 System.out.println(user.getCreateDate ());
-					 System.out.println(user.getTimeStamp ());
-					 sql.DbConnector().close();
-					 return user;
+					 return login;
 			 }
 			 else{
 				 System.out.println("User doesn't exist");
-				 sql.DbConnector().close();
-				 return null;
+				 return false;
 			 }
 			 
 		}

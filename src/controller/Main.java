@@ -51,7 +51,8 @@ public class Main {
 					
 				 }while(validation ==false);
 				 validation = false;
-				 sender.send(newUser.getEmail(),"Congratulation, registration completed","Registration Confirmation");
+				 String body =newUser.getFirst()+" "+newUser.getMiddle()+" "+newUser.getLast()+"\n"+"Thanks for registrating at the xxx online bank. Here is your log in detail:\n"+"LoginID: "+newUser.getLoginID()+"\n";
+				 sender.send(newUser.getEmail(),body,"Registration Confirmation");
 				 System.out.println("Registration completed, an email has been sent to your email address");
 				 do{
 					 System.out.println("Do you want to open an account?(y for yes, n for no)");

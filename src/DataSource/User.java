@@ -310,10 +310,6 @@ public class User implements AccountHolder{
 		accounts.clear();
 	}
 
-	@Override
-	public void InsertRecord(Connection conn) {
-		// TODO Auto-generated method stub
-		
-	}
+
 }
 

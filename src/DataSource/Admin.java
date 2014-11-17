@@ -323,35 +323,6 @@ public class Admin implements AccountHolder{
 		
 	}
 
-	@Override
-	public void InsertRecord(Connection conn,double amount) {
-		/*String query = " insert into Records (AccountNo,Credit, Debit, Balance,Authority,TimeStamp,Type)"
-			       + " values (?, ?, ?, ?, ?,?,?)";
-				PreparedStatement preparedStmt;
-				//try {
-					preparedStmt = conn.prepareStatement(query);
-					preparedStmt.setString (1, this.getFirst());
-					preparedStmt.setString (2, this.getMiddle());
-					preparedStmt.setString  (3, this.getLast());
-					preparedStmt.setString(4, this.getLoginID());
-					preparedStmt.setString(5,this.getPassword());
-					preparedStmt.setTimestamp(6, date);
-					preparedStmt.setTimestamp(7, date);
-					preparedStmt.setString(8, this.getGender());
-					preparedStmt.setString(9, this.getBranch());
-					preparedStmt.setString(10,this.getDepartment());
-					preparedStmt.setString(11,this.getPhone());
-					preparedStmt.setString(12, this.getWorkingID());
-					preparedStmt.setString(13, this.getEmail());
-					preparedStmt.execute();
-
-					preparedStmt.close();
-				/*} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					System.err.println("Login ID has been registered");
-					return false;
-				}*/
-	}
 	
 
 }

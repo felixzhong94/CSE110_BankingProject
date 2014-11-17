@@ -44,6 +44,6 @@ public interface AccountHolder {
 	public String getEmail();
 	public void setEmail(String input);
 	
-	public void InsertRecord(Connection conn,double amount);
+	
 
 }

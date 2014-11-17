@@ -30,6 +30,9 @@ public interface Account {
 	public boolean checkBalance(double amount);
 	public double credit(double amount);
 	public double debit(double amount);
+	
+	public int getAccountStatus ();
+	public void setAccountStauts (int input);
 
 }
 

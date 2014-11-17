@@ -21,6 +21,7 @@ public class Credit implements Account {
 	int accountType = CREDIT;
 	Date createDate,timeStamp;
 	private java.sql.Timestamp date = new java.sql.Timestamp(new java.util.Date().getTime());
+	int accountStatus;
 
 	@Override
 	public int getAccountNo () {
@@ -147,6 +148,18 @@ public class Credit implements Account {
 	public double debit(double amount){
 		balance = balance -amount;
 		return amount;
+		
+	}
+
+	@Override
+	public int getAccountStatus() {
+		// TODO Auto-generated method stub
+		return accountStatus;
+	}
+
+	@Override
+	public void setAccountStauts(int input) {
+		accountStatus = input;
 		
 	}
 }	

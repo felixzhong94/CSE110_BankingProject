@@ -11,7 +11,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 
-public class User {
+public class User implements AccountHolder{
 	String first,middle,last,address,loginID,password,gender;
 	String email,phone,cell,country,state,zip,socialSecurity;
 	Date createDate, timeStamp,DOB;
@@ -308,6 +308,12 @@ public class User {
 	}
 	public void accountsCleaner(){
 		accounts.clear();
+	}
+
+	@Override
+	public void InsertRecord(Connection conn) {
+		// TODO Auto-generated method stub
+		
 	}
 }
 

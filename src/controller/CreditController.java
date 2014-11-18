@@ -26,7 +26,7 @@ public class CreditController implements Controller{
 				System.out.println("Please input the amount that you want to credit:");
 				double amount = in.nextDouble();
 				accounts.get(i);
-				//no validation checking
+				//validation checking
 				if(! accounts.get(i).CanCredit(amount)){
 					System.out.println("Cannot complete credit:");
 					return false;

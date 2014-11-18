@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 
+import Rules.ActionRule;
 import Rules.CheckingAccountInterestRule;
 import Rules.CreditAccountTransactionRule;
 import Rules.InterestRules;
@@ -30,6 +31,7 @@ public class Credit implements Account {
 	
 	public TransactionRules tranactionrule = new CreditAccountTransactionRule(this,0);
 	public InterestRules interestrule = new CheckingAccountInterestRule(this);
+	public ActionRule actionrule = new ActionRule(this);
 
 	@Override
 	public int getAccountNo () {
@@ -174,19 +176,20 @@ public class Credit implements Account {
 	@Override
 	public boolean CanCredit(double amount) {
 		// TODO Auto-generated method stub
-		return tranactionrule.canDedit(amount);
+		return actionrule.CanDebit(amount, tranactionrule);
 	}
 
 	@Override
 	public boolean CanDedit(double amount) {
 		// TODO Auto-generated method stub
-		return tranactionrule.canCredit(amount);
+		return actionrule.CanCredit(amount, tranactionrule);
 	}
 
 	@Override
 	public void CalculateInterest() {
 		// TODO Auto-generated method stub
-		interestrule.ApplyInterest();
+		actionrule.ApplyInterest(interestrule);
+		//interestrule.ApplyInterest();
 		
 	}
 }	

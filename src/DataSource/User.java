@@ -16,6 +16,7 @@ public class User implements AccountHolder{
 	String email,phone,cell,country,state,zip,socialSecurity;
 	Date createDate, timeStamp,DOB;
 	private ArrayList<Account> accounts=new ArrayList<Account>();
+	ArrayList<Record> records = new ArrayList<Record>();
 	private java.sql.Timestamp date = new java.sql.Timestamp(new java.util.Date().getTime());
 	
 	public String getFirst () {
@@ -310,6 +311,39 @@ public class User implements AccountHolder{
 		accounts.clear();
 	}
 
+	public ArrayList<Record> viewRecords(Connection conn,int accountNo){
+		String query = "select * from Records where AccountNo = ?";
+		//Record record =new Record();
+		PreparedStatement statement;
 
+		try {
+			statement = conn.prepareStatement(query);
+			statement.setInt(1, accountNo);
+			ResultSet table = statement.executeQuery();
+			while(table.next()){
+				Record record =new Record();
+				record.setAccountNo( table.getInt("AccountNo"));
+				record.setDebit(  table.getDouble("Debit"));
+				record.setCredit( table.getDouble("Credit"));
+				record.setBalance( table.getDouble("Balance"));
+				record.setAuthority( table.getInt("Authority"));
+				record.setType( table.getInt("Type"));
+				record.setTimeStamp(table.getDate("TimeStamp"));
+		        records.add(record);
+			}
+
+			}catch (SQLException e) {
+			// TODO Auto-generated catch block
+				System.out.println("3");
+			e.printStackTrace();
+			return null;
+			}
+		return records;    
+
+		
+	}
+	public ArrayList<Record> getRecords(){
+		return records;
+	}
 }
 

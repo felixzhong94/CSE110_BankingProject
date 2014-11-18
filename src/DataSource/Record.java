@@ -1,6 +1,10 @@
 package DataSource;
 
 import java.sql.Connection;
+import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class Record {
 	private int AccountNo;
@@ -9,7 +13,8 @@ public class Record {
 	private double balance;
 	private int authority;
 	private int type;
-	
+	private Date timeStamp;
+	private java.sql.Timestamp date = new java.sql.Timestamp(new java.util.Date().getTime());
 	public void setAccountNo(int input){
 		AccountNo= input;
 	}
@@ -47,7 +52,36 @@ public class Record {
 	public int getType(){
 		return type;
 	}
-	public void InsertRecord(Connection conn){
-		
+	public void setTimeStamp(Date input){
+		timeStamp = input;
 	}
-}
+	public Date getTimeStamp(){
+		return timeStamp;
+	}
+	public boolean insertRecord(Connection conn){
+		String query = " insert into Records (AccountNo,Credit, Debit,Balance, Timestamp,Authority,Type)"
+			       + " values (?, ?, ?, ?, ?,?, ?)";
+				PreparedStatement preparedStmt;
+				try {
+					preparedStmt = conn.prepareStatement(query);
+					preparedStmt.setInt(1, this.getAccountNo());
+					preparedStmt.setDouble (2, this.getCredit());
+					preparedStmt.setDouble  (3, this.getDebit());
+					preparedStmt.setDouble(4, this.getBalance());
+					preparedStmt.setTimestamp(5, this.date);
+					preparedStmt.setInt(6,this.getAuthority());
+					preparedStmt.setInt(7, this.getType());
+			
+					preparedStmt.execute();
+
+					preparedStmt.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					System.err.println("Can't insert record");
+					return false;
+				}
+				return true;
+	}
+
+	}
+

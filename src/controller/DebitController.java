@@ -8,8 +8,10 @@ import DataSource.*;
 
 
 public class DebitController implements Controller{
-
+	private final static int BANK =-1;
+	private final static int WITHDRAW =2;
 	public boolean control(ArrayList<Account> accounts,SQL sql)  {
+		Record record =new Record();
 		if(accounts==null){
 			System.out.println("No account for Debit");
 			return false;
@@ -23,8 +25,14 @@ public class DebitController implements Controller{
 				double amount = in.nextDouble();
 				if(accounts.get(i).checkBalance(amount)){
 					accounts.get(i).debit(amount);
+					record.setAccountNo(accountNo);
+					record.setDebit(amount);
+					record.setBalance(accounts.get(i).getBalance());
+					record.setAuthority(BANK);
+					record.setType(WITHDRAW);
 					try {
 						accounts.get(i).update(sql.DbConnector());
+						record.insertRecord(sql.DbConnector());
 					} catch (SQLException e) {
 						// TODO Auto-generated catch block
 						System.err.println("Can't connect to Database to finish Debit");

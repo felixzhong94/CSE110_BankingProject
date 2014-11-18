@@ -34,7 +34,7 @@ public class AccountController {
 	 			System.out.println("");
 	 		}
 	 	}
-
+	 	//admin.viewRecords(null, noOfAccounts);
 
 	 		System.out.println("Please enter the command");
 	 		//System.out.println("1. create new acount");

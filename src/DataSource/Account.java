@@ -3,7 +3,17 @@ package DataSource;
 import java.sql.Connection;
 import java.sql.Date;
 
+import Rules.CheckingAccountInterestRule;
+import Rules.CreditAccountTransactionRule;
+import Rules.InterestRules;
+import Rules.TransactionRules;
+
 public interface Account {
+	
+	public boolean CanCredit (double amount);
+	public boolean CanDedit (double amount);
+	public void CalculateInterest();
+
 	
 	public int getAccountNo ();
 	public void setAccountNo (int input);

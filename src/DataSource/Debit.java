@@ -7,10 +7,11 @@ import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 
-/**
- * @author felix
- *
- */
+import Rules.CheckingAccountInterestRule;
+import Rules.DeditAccountTransactionRule;
+import Rules.InterestRules;
+import Rules.TransactionRules;
+
 public class Debit implements Account {
 	
 	private static final int DEBIT =2;
@@ -22,6 +23,12 @@ public class Debit implements Account {
 	Date createDate,timeStamp;
 	private java.sql.Timestamp date = new java.sql.Timestamp(new java.util.Date().getTime());
 	int accountStatus;
+	
+	
+	public TransactionRules tranactionrule = new DeditAccountTransactionRule(this,0);
+	public InterestRules interestrule = new CheckingAccountInterestRule(this);
+	
+	
 	@Override
 	public int getAccountNo () {
 		return accountNo;
@@ -159,6 +166,25 @@ public class Debit implements Account {
 	@Override
 	public void setAccountStauts(int input) {
 		accountStatus = input;
+		
+	}
+	
+	@Override
+	public boolean CanCredit(double amount) {
+		// TODO Auto-generated method stub
+		return tranactionrule.canDedit(amount);
+	}
+
+	@Override
+	public boolean CanDedit(double amount) {
+		// TODO Auto-generated method stub
+		return tranactionrule.canCredit(amount);
+	}
+
+	@Override
+	public void CalculateInterest() {
+		// TODO Auto-generated method stub
+		interestrule.ApplyInterest();
 		
 	}
 }

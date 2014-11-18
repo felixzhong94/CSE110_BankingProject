@@ -24,6 +24,10 @@ public class DebitController implements Controller{
 				System.out.println("Please input the amount that you want to debit:");
 				double amount = in.nextDouble();
 				if(accounts.get(i).checkBalance(amount)){
+					if(! accounts.get(i).CanDedit(amount)){
+						System.out.println("Cannot complete dedit:");
+						return false;
+					}
 					accounts.get(i).debit(amount);
 					record.setAccountNo(accountNo);
 					record.setDebit(amount);

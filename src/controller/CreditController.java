@@ -25,7 +25,12 @@ public class CreditController implements Controller{
 			if(accounts.get(i).getAccountNo()==accountNo){
 				System.out.println("Please input the amount that you want to credit:");
 				double amount = in.nextDouble();
+				accounts.get(i);
 				//no validation checking
+				if(! accounts.get(i).CanCredit(amount)){
+					System.out.println("Cannot complete credit:");
+					return false;
+				}
 				accounts.get(i).credit(amount);
 				record.setAccountNo(accountNo);
 				record.setCredit(amount);

@@ -7,12 +7,6 @@ import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 
-import Rules.ActionRule;
-import Rules.CheckingAccountInterestRule;
-import Rules.DeditAccountTransactionRule;
-import Rules.InterestRules;
-import Rules.TransactionRules;
-
 public class Debit implements Account {
 	
 	private static final int DEBIT =2;
@@ -23,14 +17,10 @@ public class Debit implements Account {
 	int accountType = DEBIT;
 	Date createDate,timeStamp;
 	private java.sql.Timestamp date = new java.sql.Timestamp(new java.util.Date().getTime());
-	int accountStatus;
+	int accountStatus = 1;
 	
+	double minimumBalance = 0;
 	
-	public TransactionRules tranactionrule = new DeditAccountTransactionRule(this,0);
-	public InterestRules interestrule = new CheckingAccountInterestRule(this);
-	public ActionRule actionrule = new ActionRule(this);
-	
-	@Override
 	public int getAccountNo () {
 		return accountNo;
 	}
@@ -170,23 +160,11 @@ public class Debit implements Account {
 		
 	}
 	
-	@Override
-	public boolean CanCredit(double amount) {
-		// TODO Auto-generated method stub
-		return actionrule.CanDebit(amount, tranactionrule);
+	public double getMinimumBalance() {
+		return minimumBalance;
 	}
 
-	@Override
-	public boolean CanDedit(double amount) {
-		// TODO Auto-generated method stub
-		return actionrule.CanCredit(amount, tranactionrule);
-	}
-
-	@Override
-	public void CalculateInterest() {
-		// TODO Auto-generated method stub
-		actionrule.ApplyInterest(interestrule);
-		//interestrule.ApplyInterest();
-		
+	public void setMinimumBalance(double amount) {
+		this.minimumBalance = amount;
 	}
 }

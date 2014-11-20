@@ -4,18 +4,14 @@ import DataSource.Account;
 
 public class DeditAccountTransactionRule implements TransactionRules{
 
-	private double minimumBalance = 0;
 	private Account account;
 	
-	public DeditAccountTransactionRule(Account account, double minimumbalance) {
-		// TODO Auto-generated constructor stub
+	public DeditAccountTransactionRule(Account account) {
 		this.account = account;
-		this.minimumBalance = minimumbalance;
 	}
 
-	@Override
+
 	public Boolean canCredit(double amount) {
-		// TODO Auto-generated method stub
 		if (amount > 0)
 			return true;
 		else{
@@ -26,12 +22,11 @@ public class DeditAccountTransactionRule implements TransactionRules{
 
 	@Override
 	public Boolean canDedit(double amount) {
-		// TODO Auto-generated method stub
 		if (amount <= 0){
 			System.out.println("Incorrect Amount");
 			return false;
 		}
-		else if(account.getBalance() - minimumBalance < amount){
+		else if(account.getBalance() - account.getMinimumBalance() < amount){
 			System.out.println("Insufficient funds");
 			return false;
 		}

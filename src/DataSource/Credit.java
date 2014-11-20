@@ -7,12 +7,6 @@ import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 
-import Rules.ActionRule;
-import Rules.CheckingAccountInterestRule;
-import Rules.CreditAccountTransactionRule;
-import Rules.InterestRules;
-import Rules.TransactionRules;
-
 /**
  * @author felix
  *
@@ -27,11 +21,9 @@ public class Credit implements Account {
 	int accountType = CREDIT;
 	Date createDate,timeStamp;
 	private java.sql.Timestamp date = new java.sql.Timestamp(new java.util.Date().getTime());
-	int accountStatus;
+	int accountStatus = 1;
 	
-	public TransactionRules tranactionrule = new CreditAccountTransactionRule(this,0);
-	public InterestRules interestrule = new CheckingAccountInterestRule(this);
-	public ActionRule actionrule = new ActionRule(this);
+	double minimumBalance = 0;
 
 	@Override
 	public int getAccountNo () {
@@ -161,35 +153,22 @@ public class Credit implements Account {
 		
 	}
 
-	@Override
 	public int getAccountStatus() {
-		// TODO Auto-generated method stub
 		return accountStatus;
 	}
 
-	@Override
 	public void setAccountStauts(int input) {
 		accountStatus = input;
 		
 	}
 
-	@Override
-	public boolean CanCredit(double amount) {
-		// TODO Auto-generated method stub
-		return actionrule.CanDebit(amount, tranactionrule);
+	public double getMinimumBalance() {
+		return minimumBalance;
 	}
 
-	@Override
-	public boolean CanDedit(double amount) {
-		// TODO Auto-generated method stub
-		return actionrule.CanCredit(amount, tranactionrule);
+	public void setMinimumBalance(double amount) {
+		this.minimumBalance = amount;
 	}
 
-	@Override
-	public void CalculateInterest() {
-		// TODO Auto-generated method stub
-		actionrule.ApplyInterest(interestrule);
-		//interestrule.ApplyInterest();
-		
-	}
+	
 }	

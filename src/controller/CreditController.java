@@ -6,6 +6,7 @@ import java.util.Scanner;
 
 import DataSource.Account;
 import DataSource.Record;
+import Rules.ActionRule;
 
 public class CreditController implements Controller{
 	private final static int BANK =-1;
@@ -26,11 +27,14 @@ public class CreditController implements Controller{
 				System.out.println("Please input the amount that you want to credit:");
 				double amount = in.nextDouble();
 				accounts.get(i);
+				
 				//validation checking
-				if(! accounts.get(i).CanCredit(amount)){
+				ActionRule rule = new ActionRule(accounts.get(i));
+				if(! rule.CanCredit(amount)){
 					System.out.println("Cannot complete credit:");
 					return false;
 				}
+				
 				accounts.get(i).credit(amount);
 				record.setAccountNo(accountNo);
 				record.setCredit(amount);

@@ -8,24 +8,56 @@ public class ActionRule {
 	private static final int FROZEN = 0;
 	private static final int CLOSED = -1;
 
+	private static final int CREDIT = 1;
+	private static final int DEBIT = 2;
+	
 	private Account account;
+	private TransactionRules transaction;
+	private InterestRules interest;
 	
 	public ActionRule(Account account) {
-		// TODO Auto-generated constructor stub
 		this.account = account;
+		switch(account.getAccountType()){
+			case CREDIT: 
+				transaction = new CreditAccountTransactionRule(account);
+				interest = new CheckingAccountInterestRule(account);
+				break;
+			case DEBIT: 
+				transaction = new DeditAccountTransactionRule(account);
+				interest = new CheckingAccountInterestRule(account);
+				break;
+		}
 	}
 	
-	public boolean CanLogin() {
+	public boolean CanViewBalance() {
 		return (account.getAccountStatus() != CLOSED);
 	}
 	
-	public boolean CanCredit(double amount, TransactionRules transactionrule) {
-		return (account.getAccountStatus() == ACTIVE && transactionrule.canCredit(amount));
+	public boolean CanCredit(double amount) {
+		if(account.getAccountStatus() != ACTIVE){
+			System.out.println("Inactive Account");
+			return false;
+		}
+		else{
+			return transaction.canCredit(amount);
+		}	
 	}
 	
-	public boolean CanDebit(double amount, TransactionRules transactionrule) {
-		return (account.getAccountStatus() == ACTIVE && transactionrule.canDedit(amount));
+	public boolean CanDebit(double amount) {
+		if(account.getAccountStatus() != ACTIVE){
+			System.out.println("Inactive Account");
+			return false;
+		}
+		else{
+			return transaction.canDedit(amount);
+		}
 	}
+	
+	public void ApplyInterest() {
+		if(account.getAccountStatus() == ACTIVE)
+			interest.ApplyInterest();
+	}
+	
 	
 	public boolean FreezeAccount(){
 		if(account.getAccountStatus() != FROZEN){
@@ -52,12 +84,6 @@ public class ActionRule {
 		}
 		else
 			return false;
-	}
-
-	public void ApplyInterest(InterestRules interestrule) {
-		// TODO Auto-generated method stub
-		if(account.getAccountStatus() == ACTIVE)
-			interestrule.ApplyInterest();
 	}
 
 }

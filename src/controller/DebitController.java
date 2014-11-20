@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 import DataSource.*;
+import Rules.ActionRule;
 
 
 public class DebitController implements Controller{
@@ -24,10 +25,14 @@ public class DebitController implements Controller{
 				System.out.println("Please input the amount that you want to debit:");
 				double amount = in.nextDouble();
 				if(accounts.get(i).checkBalance(amount)){
-					if(! accounts.get(i).CanDedit(amount)){
-						System.out.println("Cannot complete dedit:");
+					
+					//check rule class
+					ActionRule rule = new ActionRule(accounts.get(i));
+					if(! rule.CanDebit(amount)){
+						System.out.println("Cannot complete credit:");
 						return false;
 					}
+					
 					accounts.get(i).debit(amount);
 					record.setAccountNo(accountNo);
 					record.setDebit(amount);

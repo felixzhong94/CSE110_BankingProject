@@ -312,9 +312,7 @@ public class User implements AccountHolder{
 	}
 
 
-	public ArrayList<Record> getRecords(){
-		return records;
-	}
+
 
 
 }

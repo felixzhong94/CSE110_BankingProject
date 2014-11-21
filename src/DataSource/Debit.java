@@ -109,7 +109,7 @@ public class Debit implements Account {
 	@Override
 	public void update(Connection conn){
 		
-			String query = "UPDATE Account SET AccountType = ?, Balance = ?, timeStamp=?,AccountStatus=?, WHERE AccountNo = ? ";
+			String query = "UPDATE Account SET AccountType = ?, Balance = ?, timeStamp=?,AccountStatus=? WHERE AccountNo = ? ";
 			PreparedStatement preparedStmt;
 			try {
 				preparedStmt = conn.prepareStatement(query);

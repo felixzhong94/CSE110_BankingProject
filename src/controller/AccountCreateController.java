@@ -7,6 +7,7 @@ import DataSource.*;
 
 
 public class AccountCreateController {
+	private static final int ACTIVE = 1;
 	public Account create(String LoginID,SQL sql) throws SQLException{
 		Account newAccount=null;
 		boolean flag=true;
@@ -30,6 +31,7 @@ public class AccountCreateController {
 		 }while(flag == false);
 	 		newAccount.setAccountNo(newAccount.accountNoGenerator());
 			 newAccount.setLoginID(LoginID);
+			 newAccount.setAccountStauts(ACTIVE);
 			 newAccount.create(sql.DbConnector());
 			 sql.DbConnector().close();
 		return newAccount;

@@ -2,7 +2,7 @@ package Rules;
 
 public interface TransactionRules {
 
-	public Boolean canCredit(double amount);
-	public Boolean canDedit(double amount);
+	public boolean canCredit(double amount);
+	public boolean canDedit(double amount);
 	
 }

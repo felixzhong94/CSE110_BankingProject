@@ -26,21 +26,24 @@ public class CreditController implements Controller{
 			if(accounts.get(i).getAccountNo()==accountNo){
 				System.out.println("Please input the amount that you want to credit:");
 				double amount = in.nextDouble();
-				accounts.get(i);
-				
+				ActionRule actionRule = new ActionRule(accounts.get(i));
+				//accounts.get(i);
 				//validation checking
-				ActionRule rule = new ActionRule(accounts.get(i));
-				if(! rule.CanCredit(amount)){
-					System.out.println("Cannot complete credit:");
+				if(actionRule.CheckFreezeAccount()){
+					System.out.println("debit transaction denied, your account has been frozen");
 					return false;
 				}
-				
-				accounts.get(i).credit(amount);
-				record.setAccountNo(accountNo);
-				record.setCredit(amount);
-				record.setBalance(accounts.get(i).getBalance());
-				record.setAuthority(BANK);
-				record.setType(DEPOSITE);
+				if(actionRule.CheckClosedAccount()){
+					System.out.println("Account has been closed");
+					continue;
+				}
+				else{
+					accounts.get(i).credit(amount);
+					record.setAccountNo(accountNo);
+					record.setCredit(amount);
+					record.setBalance(accounts.get(i).getBalance());
+					record.setAuthority(BANK);
+					record.setType(DEPOSITE);
 				try {
 					accounts.get(i).update(sql.DbConnector());
 					record.insertRecord(sql.DbConnector());
@@ -51,6 +54,7 @@ public class CreditController implements Controller{
 				}
 				
 				return true;
+			}
 			}
 		}
 		System.out.println("Account No doesn't exist");

@@ -12,11 +12,11 @@ import java.sql.Statement;
 
 
 public class User implements AccountHolder{
-	String first,middle,last,address,loginID,password,gender;
-	String email,phone,cell,country,state,zip,socialSecurity;
-	Date createDate, timeStamp,DOB;
+	private String first,middle,last,address,loginID,password,gender;
+	private String email,phone,cell,country,state,zip,socialSecurity;
+	private Date createDate, timeStamp,DOB;
 	private ArrayList<Account> accounts=new ArrayList<Account>();
-	ArrayList<Record> records = new ArrayList<Record>();
+
 	private java.sql.Timestamp date = new java.sql.Timestamp(new java.util.Date().getTime());
 	
 	public String getFirst () {
@@ -287,7 +287,7 @@ public class User implements AccountHolder{
 				account.setAccountType(table.getInt("AccountType")); 
 		        account.setLoginID(table.getString("UserLoginID"));
 		        account.setAccountNo (table.getInt("AccountNo"));
-		        
+		        account.setAccountStauts(table.getInt("AccountStatus"));
 		        account.setBalance( table.getDouble("Balance"));
 		        account.setcreateDate( table.getDate("OpenDate"));
 		        account.setTimeStamp ( table.getDate("timeStamp"));
@@ -311,39 +311,11 @@ public class User implements AccountHolder{
 		accounts.clear();
 	}
 
-	public ArrayList<Record> viewRecords(Connection conn,int accountNo){
-		String query = "select * from Records where AccountNo = ?";
-		//Record record =new Record();
-		PreparedStatement statement;
 
-		try {
-			statement = conn.prepareStatement(query);
-			statement.setInt(1, accountNo);
-			ResultSet table = statement.executeQuery();
-			while(table.next()){
-				Record record =new Record();
-				record.setAccountNo( table.getInt("AccountNo"));
-				record.setDebit(  table.getDouble("Debit"));
-				record.setCredit( table.getDouble("Credit"));
-				record.setBalance( table.getDouble("Balance"));
-				record.setAuthority( table.getInt("Authority"));
-				record.setType( table.getInt("Type"));
-				record.setTimeStamp(table.getDate("TimeStamp"));
-		        records.add(record);
-			}
-
-			}catch (SQLException e) {
-			// TODO Auto-generated catch block
-				System.out.println("3");
-			e.printStackTrace();
-			return null;
-			}
-		return records;    
-
-		
-	}
 	public ArrayList<Record> getRecords(){
 		return records;
 	}
+
+
 }
 

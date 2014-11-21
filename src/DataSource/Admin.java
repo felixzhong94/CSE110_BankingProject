@@ -206,38 +206,7 @@ public class Admin implements AccountHolder{
 			}  
 	}
 
-	@Override
-	public int viewAccount(Connection conn) {
-		String query="select * from Account ";
-		PreparedStatement statement;
-		try {
-			statement = conn.prepareStatement(query);
-			ResultSet table = statement.executeQuery();	
-			while(table.next()){
-				Account account = null;
-				 if(table.getInt("AccountType") ==1){
-					 account = new Credit();
-				 }
-				 else if ( table.getInt("AccountType") ==2){
-					 account = new Debit();
-				 }
-				account.setAccountType(table.getInt("AccountType")); 
-		        account.setLoginID(table.getString("UserLoginID"));
-		        account.setAccountNo (table.getInt("AccountNo"));
-		        
-		        account.setBalance( table.getDouble("Balance"));
-		        account.setcreateDate( table.getDate("OpenDate"));
-		        account.setTimeStamp ( table.getDate("timeStamp"));
-		        accounts.add(account);
-			}
-			}catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return 0;
-			}    
 
-			return accounts.size();
-	}
 	
 	public String getBranch() {
 		// TODO Auto-generated method stub
@@ -323,39 +292,43 @@ public class Admin implements AccountHolder{
 		
 	}
 
-	public ArrayList<Record> viewRecords(Connection conn,int accountNo){
-		String query = "select * from Records where AccountNo = ?";
-		//Record record =new Record();
-		PreparedStatement statement;
-		
-		try {
-			statement = conn.prepareStatement(query);
-			statement.setInt(1, accountNo);
-			ResultSet table = statement.executeQuery();
-			while(table.next()){
-				Record record =new Record();
-				record.setAccountNo( table.getInt("AccountNo"));
-				record.setDebit(  table.getDouble("Debit"));
-				record.setCredit( table.getDouble("Credit"));
-				record.setBalance( table.getDouble("Balance"));
-				record.setAuthority( table.getInt("Authority"));
-				record.setType( table.getInt("Type"));
-				record.setTimeStamp(table.getDate("TimeStamp"));
-		        records.add(record);
-			}
-
-			}catch (SQLException e) {
-			// TODO Auto-generated catch block
-				System.out.println("3");
-			e.printStackTrace();
-			return null;
-			}
-		return records;    
-
-		
-	}
+	
 	public ArrayList<Record> getRecords(){
 		return records;
+	}
+
+	public int viewAccount(Connection conn){
+		String query="select * from Account ";
+		PreparedStatement statement;
+		try {
+			statement = conn.prepareStatement(query);
+			//statement.setString(1, getLoginID ());
+			ResultSet table = statement.executeQuery();	
+			while(table.next()){
+				Account account = null;
+				 if(table.getInt("AccountType") ==1){
+					 account = new Credit();
+				 }
+				 else if ( table.getInt("AccountType") ==2){
+					 account = new Debit();
+				 }
+				account.setAccountType(table.getInt("AccountType")); 
+		        account.setLoginID(table.getString("UserLoginID"));
+		        account.setAccountNo (table.getInt("AccountNo"));
+		        account.setAccountStauts(table.getInt("AccountStatus"));
+		        account.setBalance( table.getDouble("Balance"));
+		        account.setcreateDate( table.getDate("OpenDate"));
+		        account.setTimeStamp ( table.getDate("timeStamp"));
+		        accounts.add(account);
+			}
+			}catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return 0;
+			}    
+
+			return accounts.size();
+		
 	}
 
 }

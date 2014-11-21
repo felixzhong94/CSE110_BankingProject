@@ -44,7 +44,6 @@ public interface AccountHolder {
 	public String getEmail();
 	public void setEmail(String input);
 	
-	public ArrayList<Record> viewRecords(Connection conn,int accountNo);
-	public ArrayList<Record> getRecords();
+
 
 }

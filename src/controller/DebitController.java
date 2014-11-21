@@ -5,13 +5,13 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 import DataSource.*;
-import Rules.ActionRule;
-
+import Rules.*;
 
 public class DebitController implements Controller{
 	private final static int BANK =-1;
 	private final static int WITHDRAW =2;
 	public boolean control(ArrayList<Account> accounts,SQL sql)  {
+		
 		Record record =new Record();
 		if(accounts==null){
 			System.out.println("No account for Debit");
@@ -22,16 +22,25 @@ public class DebitController implements Controller{
 		int accountNo=in.nextInt();
 		for(int i = 0;i<accounts.size();i++){
 			if(accounts.get(i).getAccountNo()==accountNo){
+				//need change the min value in future
+				DeditAccountTransactionRule debitRule =new DeditAccountTransactionRule(accounts.get(i),0);
+				ActionRule actionRule = new ActionRule(accounts.get(i));
 				System.out.println("Please input the amount that you want to debit:");
 				double amount = in.nextDouble();
-				if(accounts.get(i).checkBalance(amount)){
-					
-					//check rule class
-					ActionRule rule = new ActionRule(accounts.get(i));
-					if(! rule.CanDebit(amount)){
-						System.out.println("Cannot complete credit:");
-						return false;
-					}
+
+				if(actionRule.CheckFreezeAccount()){
+					System.out.println("debit transaction denied, your account has been frozen");
+					return false;
+				}
+				if(actionRule.CheckClosedAccount()){
+					System.out.println("Account has been closed");
+					continue;
+				}
+				else if(!debitRule.canDedit(amount)){
+					System.out.println("Insufficient balance for debit transaction");
+					return false;
+				}
+				else{
 					
 					accounts.get(i).debit(amount);
 					record.setAccountNo(accountNo);
@@ -49,10 +58,7 @@ public class DebitController implements Controller{
 					}
 					return true;
 				}
-				else{
-					System.out.println("Insufficient balance for credit transaction");
-					return false;
-				}
+				
 				
 			}
 		}

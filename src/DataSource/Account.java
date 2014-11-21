@@ -2,11 +2,19 @@ package DataSource;
 
 import java.sql.Connection;
 import java.sql.Date;
+import java.util.ArrayList;
+
+import Rules.CheckingAccountInterestRule;
+import Rules.CreditAccountTransactionRule;
+import Rules.InterestRules;
+import Rules.TransactionRules;
 
 public interface Account {
 	
-	public double getMinimumBalance ();
-	public void setMinimumBalance (double amount);
+	//public boolean CanCredit (double amount);
+	//public boolean CanDedit (double amount);
+	public void CalculateInterest();
+
 	
 	public int getAccountNo ();
 	public void setAccountNo (int input);
@@ -36,6 +44,8 @@ public interface Account {
 	
 	public int getAccountStatus ();
 	public void setAccountStauts (int input);
+	public ArrayList<Record> viewRecords(Connection conn);
+	public ArrayList<Record> getRecords();
 
 }
 

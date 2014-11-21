@@ -3,9 +3,17 @@ package DataSource;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.util.ArrayList;
+
+import Rules.ActionRule;
+import Rules.CheckingAccountInterestRule;
+import Rules.CreditAccountTransactionRule;
+import Rules.InterestRules;
+import Rules.TransactionRules;
 
 /**
  * @author felix
@@ -15,16 +23,18 @@ public class Credit implements Account {
 	
 	private static final int CREDIT =1;
 	
-	int accountNo = 0; 
-	double balance = 0.0;
-	String  loginID ;
-	int accountType = CREDIT;
-	Date createDate,timeStamp;
+	private int accountNo = 0; 
+	private double balance = 0.0;
+	private String  loginID ;
+	private int accountType = CREDIT;
+	private Date createDate,timeStamp;
 	private java.sql.Timestamp date = new java.sql.Timestamp(new java.util.Date().getTime());
-	int accountStatus = 1;
+	private int accountStatus ;
 	
-	double minimumBalance = 0;
-
+	public TransactionRules tranactionrule = new CreditAccountTransactionRule(this,0);
+	public InterestRules interestrule = new CheckingAccountInterestRule(this);
+	public ActionRule actionrule = new ActionRule(this);
+	private ArrayList<Record> records = new ArrayList<Record>();
 	@Override
 	public int getAccountNo () {
 		return accountNo;
@@ -100,14 +110,16 @@ public class Credit implements Account {
 	@Override
 	public void update(Connection conn){
 		
-			String query = "UPDATE Account SET AccountType = ?, Balance = ?, timeStamp=? WHERE AccountNo = ? ";
+			String query = "UPDATE Account SET AccountType = ?, Balance = ?, timeStamp=? ,AccountStatus =? WHERE AccountNo = ? ";
 			PreparedStatement preparedStmt;
 			try {
 				preparedStmt = conn.prepareStatement(query);
 				preparedStmt.setInt(1,this.getAccountType());
 				preparedStmt.setDouble(2,this.getBalance ());
 				preparedStmt.setTimestamp(3, this.date);
-				preparedStmt.setInt(4,this.getAccountNo());
+				preparedStmt.setInt(4,this.getAccountStatus());
+				preparedStmt.setInt(5,this.getAccountNo());
+
 				preparedStmt.executeUpdate();
 				preparedStmt.close();
 			} catch (SQLException e) {
@@ -120,8 +132,8 @@ public class Credit implements Account {
 	
 	@Override
 	public void create(Connection conn) {
-		String query = " insert into Account (UserLoginID,AccountNo, AccountType, Balance, OpenDate,timeStamp)"
-	       + " values (?, ?, ?, ?, ?,?)";
+		String query = " insert into Account (UserLoginID,AccountNo, AccountType, Balance, OpenDate,timeStamp,AccountStatus)"
+	       + " values (?, ?, ?, ?, ?,?,?)";
 		PreparedStatement preparedStmt;
 		try {
 			preparedStmt = conn.prepareStatement(query);
@@ -132,6 +144,7 @@ public class Credit implements Account {
 			preparedStmt.setDouble(4, this.getBalance ());
 			preparedStmt.setTimestamp(5, this.date);
 			preparedStmt.setTimestamp(6, this.date);
+			preparedStmt.setInt  (7, getAccountStatus());
 			preparedStmt.execute();
 			preparedStmt.close();
 		} catch (SQLException e) {
@@ -153,22 +166,73 @@ public class Credit implements Account {
 		
 	}
 
+	@Override
 	public int getAccountStatus() {
+		// TODO Auto-generated method stub
 		return accountStatus;
 	}
 
+	@Override
 	public void setAccountStauts(int input) {
 		accountStatus = input;
 		
 	}
 
-	public double getMinimumBalance() {
-		return minimumBalance;
+	/*@Override
+	public boolean CanCredit(double amount) {
+		// TODO Auto-generated method stub
+		return actionrule.CanDebit(amount, tranactionrule);
 	}
 
-	public void setMinimumBalance(double amount) {
-		this.minimumBalance = amount;
+	@Override
+	public boolean CanDedit(double amount) {
+		// TODO Auto-generated method stub
+		return actionrule.CanCredit(amount, tranactionrule);
+	}*/
+
+	@Override
+	public void CalculateInterest() {
+		// TODO Auto-generated method stub
+		actionrule.ApplyInterest(interestrule);
+		//interestrule.ApplyInterest();
+		
+	}
+	public ArrayList<Record> viewRecords(Connection conn){
+		String query = "select * from Records where AccountNo = ?";
+		//Record record =new Record();
+		PreparedStatement statement;
+		
+		try {
+			statement = conn.prepareStatement(query);
+			statement.setInt(1, this.getAccountNo());
+			ResultSet table = statement.executeQuery();
+			while(table.next()){
+				Record record =new Record();
+				record.setAccountNo( table.getInt("AccountNo"));
+				record.setDebit(  table.getDouble("Debit"));
+				record.setCredit( table.getDouble("Credit"));
+				record.setBalance( table.getDouble("Balance"));
+				record.setAuthority( table.getInt("Authority"));
+				record.setType( table.getInt("Type"));
+				record.setTimeStamp(table.getDate("TimeStamp"));
+		        records.add(record);
+			}
+
+			}catch (SQLException e) {
+			// TODO Auto-generated catch block
+				System.out.println("3");
+			e.printStackTrace();
+			return null;
+			}
+		return records;    
+
+		
 	}
 
-	
+	@Override
+	public ArrayList<Record> getRecords() {
+		// TODO Auto-generated method stub
+		return records;
+	}
+
 }	

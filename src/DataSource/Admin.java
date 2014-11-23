@@ -21,7 +21,7 @@ public class Admin implements AccountHolder{
 	private String email;
 	private java.sql.Timestamp date = new java.sql.Timestamp(new java.util.Date().getTime());
 	private ArrayList<Account> accounts=new ArrayList<Account>();
-	ArrayList<Record> records = new ArrayList<Record>();
+
 	@Override
 	public String getLoginID() {
 		// TODO Auto-generated method stub
@@ -293,9 +293,6 @@ public class Admin implements AccountHolder{
 	}
 
 	
-	public ArrayList<Record> getRecords(){
-		return records;
-	}
 
 	public int viewAccount(Connection conn){
 		String query="select * from Account ";

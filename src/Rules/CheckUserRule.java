@@ -20,9 +20,12 @@ public class CheckUserRule {
 		        user.setFirst( table.getString("User.FirstName"));
 		        user.setMiddle(  table.getString("User.MiddleName"));
 		        user.setLast( table.getString("User.LastName"));
+		        user.setPhone(table.getString("User.Phone"));
+		        user.setEmail(table.getString("User.Email"));
 		        account.setAccountNo( table.getInt("Account.AccountNo"));
 		        account.setBalance( table.getDouble("Account.Balance"));
 		        account.setAccountStauts( table.getInt("Account.AccountStatus"));
+		        
 		        return true;
 			}
 			else{

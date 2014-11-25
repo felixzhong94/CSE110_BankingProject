@@ -32,7 +32,6 @@ public class TransferController implements Controller{
 		Scanner in =new Scanner(System.in);
 		System.out.println("Please input the account number that you want to transfer from:");
 		int accountNo=in.nextInt();
-
 			
 		for(int i = 0;i<accounts.size();i++){
 			if(accounts.get(i).getAccountNo()==accountNo){
@@ -62,6 +61,8 @@ public class TransferController implements Controller{
 		}
 		System.out.println("Please input the accountNo that you want to transfer money to:");
 		accountNo =in.nextInt();
+
+
 		User toUser=new User();
 		
 		ToAccount=new Credit();
@@ -79,7 +80,10 @@ public class TransferController implements Controller{
 			else if (flag==2){
 				ToAccount=new Debit();
 			}
+
 			
+			
+			//
 			try {
 				if(!checkUser.check(sql.DbConnector(),accountNo,ToAccount,toUser)){
 					
@@ -94,10 +98,27 @@ public class TransferController implements Controller{
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
+		System.out.println("Please choose using the phone number or using the email address for transfer\n 1 for phone number, 2 for email address");
+		int mux=in.nextInt();
 		
-		String option = null;
+		if (mux == 1){
+		System.out.println("Please input the phone number that you want to transfer to:");
+		String phone=in.nextLine(); 
+		if (phone != toUser.getPhone())
+			return false;
+		}
+		else if (mux == 2){
+		System.out.println("Please input the email address that you want to transfer to:");
+		String email=in.nextLine();
+		if (email != toUser.getEmail())
+			return false;
+		}
+		else 
+			return false;
+		//String option = null;
 		boolean flag =true;
 		do{
+			String option =null;
 			System.out.println("Do you want to transfer to account: "+accountNo );
 			System.out.println("Owned by: "+toUser.getFirst());
 			System.out.println("input 1 for yes, 2 for no");

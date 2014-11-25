@@ -41,7 +41,7 @@ public class LoginPage {
 	/**
 	 * Create the application.
 	 */
-	public LoginPage(Admin admin,) {
+	public LoginPage(Admin admin) {
 		initialize();
 		this.admin = admin;
 		//Logic logic = new Logic();

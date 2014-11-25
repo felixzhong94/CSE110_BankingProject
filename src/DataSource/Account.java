@@ -47,5 +47,7 @@ public interface Account {
 	public ArrayList<Record> viewRecords(Connection conn);
 	public ArrayList<Record> getRecords();
 
+
+
 }
 

@@ -22,6 +22,7 @@ import Rules.TransactionRules;
 public class Credit implements Account {
 	
 	private static final int CREDIT =1;
+
 	
 	private int accountNo = 0; 
 	private double balance = 0.0;
@@ -65,6 +66,8 @@ public class Credit implements Account {
 	public void setLoginID (String input) {
 		loginID = input;
 	}
+	
+
 	
 	@Override
 	public int getAccountType () {

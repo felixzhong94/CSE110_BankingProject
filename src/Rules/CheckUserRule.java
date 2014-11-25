@@ -46,6 +46,7 @@ public class CheckUserRule {
 		try {
 			statement = conn.prepareStatement(query);
 			statement.setInt(1, accountNo);
+			//statement.setString(1,Phone);
 			ResultSet table = statement.executeQuery();
 			if(table.next()){
 		       /* user.setFirst( table.getString("User.FirstName"));

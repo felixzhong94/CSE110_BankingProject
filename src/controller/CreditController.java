@@ -13,7 +13,7 @@ public class CreditController implements Controller{
 	private final static int DEPOSITE =1;
 	@Override
 	public boolean control(ArrayList<Account> accounts,SQL sql) {
-		Record record =new Record();
+
 		if(accounts==null){
 			System.out.println("No account for credit");
 			return false;
@@ -39,6 +39,7 @@ public class CreditController implements Controller{
 				}
 				else{
 					accounts.get(i).credit(amount);
+					Record record =new Record();
 					record.setAccountNo(accountNo);
 					record.setCredit(amount);
 					record.setBalance(accounts.get(i).getBalance());

@@ -12,7 +12,7 @@ public class DebitController implements Controller{
 	private final static int WITHDRAW =2;
 	public boolean control(ArrayList<Account> accounts,SQL sql)  {
 		
-		Record record =new Record();
+		
 		if(accounts==null){
 			System.out.println("No account for Debit");
 			return false;
@@ -43,6 +43,7 @@ public class DebitController implements Controller{
 				else{
 					
 					accounts.get(i).debit(amount);
+					Record record =new Record();
 					record.setAccountNo(accountNo);
 					record.setDebit(amount);
 					record.setBalance(accounts.get(i).getBalance());

@@ -59,6 +59,7 @@ public class AccountController {
 	 				break;
 	 			case "3":
 	 				ShowBalanceController balance = new ShowBalanceController();
+	 				
 	 				 balance.control(userAccounts,sql);
 	 				break;
 	 			case "4":
@@ -68,6 +69,7 @@ public class AccountController {
 	 				break;
 	 			case "5":
 	 				ShowRecordsController records = new ShowRecordsController();
+	 				System.out.println(userAccounts.size());
 	 				records.control(userAccounts,sql);
 	 				break;
 	 			case "6":

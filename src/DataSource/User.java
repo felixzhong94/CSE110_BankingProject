@@ -311,9 +311,25 @@ public class User implements AccountHolder{
 		accounts.clear();
 	}
 
+	public boolean updatePassword(Connection conn,String password,String LoginID){
+		String query = "UPDATE User SET  Password= ?WHERE  LoginID = ?";
+		PreparedStatement preparedStmt;
+		try {
+			preparedStmt = conn.prepareStatement(query);
+			preparedStmt.setString (1, password);
+			preparedStmt.setString (2, LoginID);
+			preparedStmt.execute();
+			preparedStmt.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+		}
+	}
 
 
 
 
-}
 

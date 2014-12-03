@@ -13,7 +13,7 @@ public interface Account {
 	
 	//public boolean CanCredit (double amount);
 	//public boolean CanDedit (double amount);
-	public void CalculateInterest();
+	
 
 	
 	public int getAccountNo ();
@@ -46,8 +46,9 @@ public interface Account {
 	public void setAccountStauts (int input);
 	public ArrayList<Record> viewRecords(Connection conn);
 	public ArrayList<Record> getRecords();
-
-
+	public ArrayList<Record> ThirtyDaysRecords(Connection conn);
+	public double calculateInterest();
+	public double compute();
 
 }
 

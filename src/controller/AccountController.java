@@ -44,6 +44,8 @@ public class AccountController {
 	 		System.out.println("4. Close one account");
 	 		System.out.println("5. Check Account Record");
 	 		System.out.println("6. Back to main menu");
+	 		System.out.println("7. Calculate interests");
+	 		System.out.println("8. Calculate penalty");
 	 		String userInput = in.nextLine();
 	 		switch(userInput){
 
@@ -74,6 +76,14 @@ public class AccountController {
 	 				break;
 	 			case "6":
 	 				flag=false;
+	 				break;
+	 			case "7":
+	 				InterestController interest =new InterestController();
+	 				interest.control(userAccounts,sql);
+	 				break;
+	 			case "8":
+	 				PenaltyController penalty =new PenaltyController();
+	 				penalty.control(userAccounts,sql);
 	 				break;
 	 			default:
 	 				System.err.println("Invalid input");

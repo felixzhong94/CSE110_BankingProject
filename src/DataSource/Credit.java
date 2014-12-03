@@ -19,7 +19,7 @@ import Rules.TransactionRules;
  * @author felix
  *
  */
-public class Credit implements Account {
+public class Credit implements Account{
 	
 	private static final int CREDIT =1;
 
@@ -193,13 +193,7 @@ public class Credit implements Account {
 		return actionrule.CanCredit(amount, tranactionrule);
 	}*/
 
-	@Override
-	public void CalculateInterest() {
-		// TODO Auto-generated method stub
-		actionrule.ApplyInterest(interestrule);
-		//interestrule.ApplyInterest();
-		
-	}
+
 	public ArrayList<Record> viewRecords(Connection conn){
 		String query = "select * from Records where AccountNo = ?";
 		//Record record =new Record();
@@ -238,4 +232,86 @@ public class Credit implements Account {
 		return records;
 	}
 
+	public double calculateInterest() {
+		boolean TwoPercent = false;
+		boolean ThreePercent =false;
+		boolean OnePercent =false;
+		double returnValue = 0;
+		for(int i=0;i<records.size();i++){
+			if(records.get(i).getBalance()<1000){
+				return returnValue;
+			}
+			if((records.get(i).getBalance()>=1000)&&(records.get(i).getBalance()<2000)){
+				OnePercent =true;
+			}
+			if((records.get(i).getBalance()>=2000)&&(records.get(i).getBalance()<3000)){
+				TwoPercent =true;
+			}
+			if((records.get(i).getBalance()>=3000)){
+				ThreePercent =true;
+			}
+		}
+		if(OnePercent == true){
+			returnValue =(balance*0.01);
+			balance = returnValue+balance;
+		}
+		else if(TwoPercent == true){
+			returnValue =(balance*0.02);
+			balance = returnValue+balance;
+		}
+		else if(ThreePercent == true){
+			returnValue =(balance*0.03);
+			balance = returnValue+balance;
+		}
+		return returnValue;
+	}
+
+	@Override
+	public ArrayList<Record> ThirtyDaysRecords(Connection conn) {
+		String query = "select * from Records TimeStamp < NOW() - INTERVAL '10 days' AND AccountNo = ?";
+		//Record record =new Record();
+		PreparedStatement statement;
+		
+		try {
+			statement = conn.prepareStatement(query);
+			statement.setInt(1, this.getAccountNo());
+			ResultSet table = statement.executeQuery();
+			while(table.next()){
+				Record record =new Record();
+				record.setAccountNo( table.getInt("AccountNo"));
+				record.setDebit(  table.getDouble("Debit"));
+				record.setCredit( table.getDouble("Credit"));
+				record.setBalance( table.getDouble("Balance"));
+				record.setAuthority( table.getInt("Authority"));
+				record.setType( table.getInt("Type"));
+				record.setTimeStamp(table.getDate("TimeStamp"));
+		        records.add(record);
+			}
+
+			}catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+			}
+		return records;    
+
+	}
+
+	@Override
+	public double compute() {
+		boolean penalty = false;
+		for(int i=0;i<records.size();i++){
+			if(records.get(i).getBalance()<100){
+				penalty = true;
+			}
+		}
+		if(penalty = false){
+			return 0;
+		}
+		else {
+			balance = balance -25;
+			return 25;
+		}
+
+	}
 }	

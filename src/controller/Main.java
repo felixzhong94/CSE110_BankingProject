@@ -128,6 +128,19 @@ public class Main {
 				//sender.send("williamlin59@outlook.com","test","password reset");*/
 				
 			 }
+			 
+			 else if(Integer.parseInt(choice)==4){
+				 ResetPassword resetpassword = new ResetPassword(password, sql);
+			}
+			 
+			 
+			 else if(Integer.parseInt(choice)==5){
+				 ForgetPassword forgetpassword = new ForgetPassword(newUser,password, sql);
+			 }
+			 
+			 
+			 
+			 
 			 else{
 				 System.err.println("Invalid Option");
 				 

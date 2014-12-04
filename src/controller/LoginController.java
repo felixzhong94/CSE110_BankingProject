@@ -18,7 +18,7 @@ public class LoginController {
 			 System.out.println("Please enter your PassWord:");
 			 user.setPassword (password.passwordConvertor(in.nextLine()));
 			 login =user.view(sql.DbConnector());
-			 
+			  
 			 if(login== true){
 					 return login;
 			 }

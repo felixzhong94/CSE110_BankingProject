@@ -312,7 +312,7 @@ public class User implements AccountHolder{
 	}
 
 	public boolean updatePassword(Connection conn,String password,String LoginID){
-		String query = "UPDATE User SET  Password= ?WHERE  LoginID = ?";
+		String query = "UPDATE User SET  Password= ? WHERE  LoginID = ?";
 		PreparedStatement preparedStmt;
 		try {
 			preparedStmt = conn.prepareStatement(query);

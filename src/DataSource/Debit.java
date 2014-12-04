@@ -24,7 +24,8 @@ public class Debit implements Account {
 	private String  loginID ;
 	private int accountType = DEBIT;
 	private Date createDate,timeStamp;
-	private java.sql.Timestamp date = new java.sql.Timestamp(new java.util.Date().getTime());
+	private long today=new java.util.Date().getTime();
+	private java.sql.Timestamp date = new java.sql.Timestamp(today);
 	private int accountStatus ;	
 	private ArrayList<Record> records = new ArrayList<Record>();
 	
@@ -229,36 +230,31 @@ public class Debit implements Account {
 
 	@Override
 	public double calculateInterest() {
-		boolean TwoPercent = false;
-		boolean ThreePercent =false;
-		boolean FourPercent =false;
 		double returnValue = 0;
+		double fullValue =0;
+		long day = 30*60*60*24*1000;
 		for(int i=0;i<records.size();i++){
+			long timeDiff=records.get(i).getTimeStamp().getTime()-day;
+			long diffDays = timeDiff / (1000 * 60 * 60 * 24);
 			if(records.get(i).getBalance()<1000){
-				return returnValue;
+				continue;
+				
 			}
-			if((records.get(i).getBalance()>=1000)&&(records.get(i).getBalance()<2000)){
-				TwoPercent =true;
+			else if((records.get(i).getBalance()>=1000)&&(records.get(i).getBalance()<2000)){
+				returnValue =(balance*0.02)*diffDays;
 			}
-			if((records.get(i).getBalance()>=2000)&&(records.get(i).getBalance()<3000)){
-				ThreePercent =true;
+			else if((records.get(i).getBalance()>=2000)&&(records.get(i).getBalance()<3000)){
+				returnValue =(balance*0.03)*diffDays;
 			}
-			if((records.get(i).getBalance()>=3000)){
-				FourPercent =true;
+			else if((records.get(i).getBalance()>=3000)){
+				returnValue =(balance*0.04)*diffDays;
 			}
+			fullValue =fullValue+returnValue;
+			
+			day = records.get(i).getTimeStamp().getTime();
 		}
-		if(TwoPercent == true){
-			returnValue =(balance*0.02);
-			balance = returnValue+balance;
-		}
-		else if(ThreePercent == true){
-			returnValue =(balance*0.03);
-			balance = returnValue+balance;
-		}
-		else if(FourPercent == true){
-			returnValue =(balance*0.04);
-			balance = returnValue+balance;
-		}
+		returnValue = fullValue/30;
+		balance =balance+returnValue;
 		return returnValue;
 	}
 

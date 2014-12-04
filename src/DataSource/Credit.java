@@ -29,7 +29,8 @@ public class Credit implements Account{
 	private String  loginID ;
 	private int accountType = CREDIT;
 	private Date createDate,timeStamp;
-	private java.sql.Timestamp date = new java.sql.Timestamp(new java.util.Date().getTime());
+	private long today =new java.util.Date().getTime();
+	private java.sql.Timestamp date = new java.sql.Timestamp(today);
 	private int accountStatus ;
 	
 	public TransactionRules tranactionrule = new CreditAccountTransactionRule(this,0);
@@ -233,36 +234,32 @@ public class Credit implements Account{
 	}
 
 	public double calculateInterest() {
-		boolean TwoPercent = false;
-		boolean ThreePercent =false;
-		boolean OnePercent =false;
+
 		double returnValue = 0;
+		double fullValue =0;
+		long day = 30*60*60*24*1000;
 		for(int i=0;i<records.size();i++){
+			long timeDiff=records.get(i).getTimeStamp().getTime()-day;
+			long diffDays = timeDiff / (1000 * 60 * 60 * 24);
 			if(records.get(i).getBalance()<1000){
-				return returnValue;
+				continue;
+				
 			}
-			if((records.get(i).getBalance()>=1000)&&(records.get(i).getBalance()<2000)){
-				OnePercent =true;
+			else if((records.get(i).getBalance()>=1000)&&(records.get(i).getBalance()<2000)){
+				returnValue =(balance*0.01)*diffDays;
 			}
-			if((records.get(i).getBalance()>=2000)&&(records.get(i).getBalance()<3000)){
-				TwoPercent =true;
+			else if((records.get(i).getBalance()>=2000)&&(records.get(i).getBalance()<3000)){
+				returnValue =(balance*0.02)*diffDays;
 			}
-			if((records.get(i).getBalance()>=3000)){
-				ThreePercent =true;
+			else if((records.get(i).getBalance()>=3000)){
+				returnValue =(balance*0.03)*diffDays;
 			}
+			fullValue =fullValue+returnValue;
+			
+			day = records.get(i).getTimeStamp().getTime();
 		}
-		if(OnePercent == true){
-			returnValue =(balance*0.01);
-			balance = returnValue+balance;
-		}
-		else if(TwoPercent == true){
-			returnValue =(balance*0.02);
-			balance = returnValue+balance;
-		}
-		else if(ThreePercent == true){
-			returnValue =(balance*0.03);
-			balance = returnValue+balance;
-		}
+		returnValue = fullValue/30;
+		balance =balance+returnValue;
 		return returnValue;
 	}
 

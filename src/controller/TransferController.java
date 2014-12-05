@@ -47,16 +47,25 @@ public class TransferController implements Controller{
 				if(actionRule.CheckClosedAccount()){
 					System.out.println("Account has been closed");
 					continue;
-				}
-				else{
-					fromAccount = accounts.get(i);
-					/*accounts.get(i).credit(amount);
-					record.setAccountNo(accountNo);
-					record.setCredit(amount);
-					record.setBalance(accounts.get(i).getBalance());
-					record.setAuthority(BANK);
-					record.setType(DEPOSITE);*/
-				}
+				} else
+					try {
+						if(!actionRule.amountLimits(sql.DbConnector(),accounts.get(i).getAccountNo())){
+							System.out.println("It has debited over 10000 today");
+							return false;
+						}
+						else{
+							fromAccount = accounts.get(i);
+							/*accounts.get(i).credit(amount);
+							record.setAccountNo(1accountNo);
+							record.setCredit(amount);
+							record.setBalance(accounts.get(i).getBalance());
+							record.setAuthority(BANK);
+							record.setType(DEPOSITE);*/
+						}
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 			}
 		}
 		System.out.println("Please input the accountNo that you want to transfer money to:");
@@ -100,22 +109,23 @@ public class TransferController implements Controller{
 		}
 		System.out.println("Please choose using the phone number or using the email address for transfer\n 1 for phone number, 2 for email address");
 		int mux=in.nextInt();
+		Scanner in2 =new Scanner(System.in);
 		
 		if (mux == 1){
 		System.out.println("Please input the phone number that you want to transfer to:");
-		String phone=in.nextLine(); 
-		if (phone != toUser.getPhone())
-			return false;
+		String phone=in2.nextLine(); 
+			if (!phone.equals( toUser.getPhone())){
+				return false;
+			}
 		}
 		else if (mux == 2){
-		System.out.println("Please input the email address that you want to transfer to:");
-		String email=in.nextLine();
-		if (email != toUser.getEmail())
-			return false;
-		}
-		else 
-			return false;
-		//String option = null;
+			System.out.println("Please input the email address that you want to transfer to:");
+			String email=in2.nextLine();
+			if (!email.equals( toUser.getEmail())){
+				return false;
+			}
+
+		//String option = null;*/
 		boolean flag =true;
 		do{
 			String option =null;
@@ -183,11 +193,12 @@ public class TransferController implements Controller{
 				flag = false;
 			}
 		}while(!flag);
-		return true;
+		
 	
 			
-		
-
+		}
+		return true;
 	}
+	
 
 }

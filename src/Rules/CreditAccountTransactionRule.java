@@ -1,6 +1,12 @@
 package Rules;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 import DataSource.Account;
+import DataSource.Record;
 
 public class CreditAccountTransactionRule implements TransactionRules{
 

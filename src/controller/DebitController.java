@@ -1,5 +1,6 @@
 package controller;
 
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -10,7 +11,7 @@ import Rules.*;
 public class DebitController implements Controller{
 	private final static int BANK =-1;
 	private final static int WITHDRAW =2;
-	public boolean control(ArrayList<Account> accounts,SQL sql)  {
+	public boolean control(ArrayList<Account> accounts,SQL sql)   {
 		
 		
 		if(accounts==null){
@@ -39,26 +40,35 @@ public class DebitController implements Controller{
 				else if(!debitRule.canDedit(amount)){
 					System.out.println("Insufficient balance for debit transaction");
 					return false;
-				}
-				else{
-					
-					accounts.get(i).debit(amount);
-					Record record =new Record();
-					record.setAccountNo(accountNo);
-					record.setDebit(amount);
-					record.setBalance(accounts.get(i).getBalance());
-					record.setAuthority(BANK);
-					record.setType(WITHDRAW);
+				} else
 					try {
-						accounts.get(i).update(sql.DbConnector());
-						record.insertRecord(sql.DbConnector());
+						if(!actionRule.amountLimits(sql.DbConnector(),accounts.get(i).getAccountNo())){
+							System.out.println("It has debited over 10000 today");
+							return false;
+						}
+						else{
+							
+							accounts.get(i).debit(amount);
+							Record record =new Record();
+							record.setAccountNo(accountNo);
+							record.setDebit(amount);
+							record.setBalance(accounts.get(i).getBalance());
+							record.setAuthority(BANK);
+							record.setType(WITHDRAW);
+							try {
+								accounts.get(i).update(sql.DbConnector());
+								record.insertRecord(sql.DbConnector());
+							} catch (SQLException e) {
+								// TODO Auto-generated catch block
+								System.err.println("Can't connect to Database to finish Debit");
+								e.printStackTrace();
+							}
+							return true;
+						}
 					} catch (SQLException e) {
 						// TODO Auto-generated catch block
-						System.err.println("Can't connect to Database to finish Debit");
 						e.printStackTrace();
 					}
-					return true;
-				}
 				
 				
 			}

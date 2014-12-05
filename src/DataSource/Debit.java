@@ -260,7 +260,7 @@ public class Debit implements Account {
 
 	@Override
 	public ArrayList<Record> ThirtyDaysRecords(Connection conn) {
-		String query = "select * from Records TimeStamp < NOW() - INTERVAL '10 days' AND AccountNo = ?";
+		String query = "select * from Records where TimeStamp>= ( CURDATE() - INTERVAL 10 DAY ) AND AccountNo = ?";
 		//Record record =new Record();
 		PreparedStatement statement;
 		

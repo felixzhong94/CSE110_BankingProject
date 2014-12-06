@@ -71,10 +71,10 @@ public class ActionRule {
 		return account.getAccountStatus() == CLOSED;
 	}
 	public boolean amountLimits(Connection conn,int accountNo){
-		String query = "select sum(Balance) as amount from Records where TimeStamp =  CURDATE() AND AccountNo = ?";
+		String query = "select sum(Balance) as amount from Records where DATE(TimeStamp) =CURDATE() AND AccountNo = ?";
 		//Record record =new Record();
 		PreparedStatement statement;
-		double amount =0;
+		double amount = 0;
 		try {
 			statement = conn.prepareStatement(query);
 			statement.setInt(1, accountNo);
@@ -89,6 +89,7 @@ public class ActionRule {
 			e.printStackTrace();
 			return false;
 			}
+		
 	    if(amount >10000){
 	    	return false;
 	    }

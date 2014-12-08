@@ -107,18 +107,18 @@ public class TransferController implements Controller{
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		System.out.println("Please choose using the phone number or using the email address for transfer\n 1 for phone number, 2 for email address");
+		System.out.println("Please choose using the phone number or using the email address for transfer\n 1. for email address");
 		int mux=in.nextInt();
 		Scanner in2 =new Scanner(System.in);
 		
-		if (mux == 1){
+		/*if (mux == 1){
 		System.out.println("Please input the phone number that you want to transfer to:");
 		String phone=in2.nextLine(); 
 			if (!phone.equals( toUser.getPhone())){
 				return false;
 			}
-		}
-		else if (mux == 2){
+		}*/
+		 if (mux == 1){
 			System.out.println("Please input the email address that you want to transfer to:");
 			String email=in2.nextLine();
 			if (!email.equals( toUser.getEmail())){
@@ -151,6 +151,10 @@ public class TransferController implements Controller{
 				else if(! debitRule.canDedit(amount)){
 					System.out.println("Insufficient balance for debit transaction");
 					return false;
+				}
+				else if(! actionRule.amountChecking(amount)){
+					System.out.println("Transfer amount over the daily limit.");
+					return false;					
 				}
 				else{
 					

@@ -40,7 +40,12 @@ public class DebitController implements Controller{
 				else if(!debitRule.canDedit(amount)){
 					System.out.println("Insufficient balance for debit transaction");
 					return false;
-				} else
+				}
+				else if(! actionRule.amountChecking(amount)){
+					System.out.println("Transfer amount over the daily limit.");
+					return false;					
+				}
+				else
 					try {
 						if(!actionRule.amountLimits(sql.DbConnector(),accounts.get(i).getAccountNo())){
 							System.out.println("It has debited over 10000 today");

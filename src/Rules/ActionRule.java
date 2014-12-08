@@ -96,5 +96,8 @@ public class ActionRule {
 		return true;
 		
 	}
+	public boolean amountChecking(double amount){
+		return amount<=10000;
+	}
 }
 

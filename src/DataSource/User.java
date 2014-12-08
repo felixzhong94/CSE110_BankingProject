@@ -227,12 +227,13 @@ public class User implements AccountHolder{
 	
 	
 	public boolean view(Connection conn){
-		String query = "select * from User where LoginID = ? and Password =?";
+		String query = "select * from User where  Password =? AND LoginID=?";
 		PreparedStatement statement;
 		try {
 			statement = conn.prepareStatement(query);
-			statement.setString(1, this.getLoginID());
-			statement.setString(2, this.getPassword());
+			//statement.setString(1, this.getLoginID());
+			statement.setString(1, this.getPassword());
+			statement.setString(2, this.getLoginID());
 			ResultSet table = statement.executeQuery();
 			if(table.next()){
 		        this.setFirst( table.getString("FirstName"));
@@ -241,6 +242,7 @@ public class User implements AccountHolder{
 		        this.setAddress( table.getString("Address"));
 		        this.setLoginID( table.getString("LoginID"));
 		        this.setPassword( table.getString("Password"));
+		        //System.out.println(password);
 		        this.setcreateDate( table.getDate("CreateDate"));
 		        this.setTimeStamp(table.getDate("TimeStamp"));
 		        this.setGender(table.getString("Gender"));

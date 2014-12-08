@@ -12,13 +12,13 @@ public class Password {
 	public String passwordConvertor(String input) throws NoSuchAlgorithmException, NoSuchProviderException, UnsupportedEncodingException{
 		Security.addProvider(new BouncyCastleProvider());
 
-		String data = "hello world";
+		//String data = "hello world";
 
 		MessageDigest mda = MessageDigest.getInstance("SHA-512", "BC");
-		byte [] digesta = mda.digest(data.getBytes());
+		byte [] digesta = mda.digest(input.getBytes());
 
 		MessageDigest mdb = MessageDigest.getInstance("SHA-512", "BC");
-		byte [] digestb = mdb.digest(data.getBytes());
+		byte [] digestb = mdb.digest(input.getBytes());
 
 		System.out.println(MessageDigest.isEqual(digesta, digestb));
 

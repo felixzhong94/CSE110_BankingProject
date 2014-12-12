@@ -45,6 +45,7 @@ public class BankDemo {
 	/**
 	 * Initialize the contents of the frame.
 	 */
+	//Initialize: set events for different buttons, texts, etc.
 	private void initialize() {
 		frame = new JFrame();
 		frame.setBounds(100, 100, 710, 535);

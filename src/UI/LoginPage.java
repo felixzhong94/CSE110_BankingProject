@@ -105,6 +105,7 @@ public class LoginPage {
 	public String getPassword(){
 		return Password;
 	}
+	//UI activity
 	public static void main(String[] args) {
 		SQL sql = new SQL();
 		 //1LoginPage loginPage = new LoginPage();

@@ -9,7 +9,7 @@ import controller.CreditController;
 import controller.DebitController;
 import controller.SQL;
 
-
+//testController: get accounts' information for account list
 public class testControllor {
 	DebitController debit = new DebitController();
 	CreditController credit = new CreditController();
@@ -21,6 +21,7 @@ public class testControllor {
 	public void test(){
 		debit.control(accounts,sql);
 		credit.control(accounts,sql);
+		//print the Account No and Balance of all accounts
 		for(int i = 0;i < accounts.size(); i++){
 			System.out.print("Account No "+ accounts.get(i).getAccountNo());
 			System.out.println(accounts.get(i).getBalance());

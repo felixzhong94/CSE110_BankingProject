@@ -15,6 +15,7 @@ public class testSQL {
 		try {
 			statement = conn.prepareStatement(query);
 			ResultSet table = statement.executeQuery();
+			//get the information table of testUser
 			if(table.next()){
 				testUser.setFirst( table.getString("FirstName"));
 				testUser.setMiddle(  table.getString("MiddleName"));
@@ -46,47 +47,57 @@ public class testSQL {
 			
 			
 			} 
-		
+			//print value of User FirstName
 			System.out.println("First Name:");
 			System.out.println(user.getFirst());
 			System.out.println(testUser.getFirst());
 			
+			//print value of User MiddlerName
 			System.out.println("MiddleName");
 			System.out.println(user.getMiddle());
 			System.out.println(testUser.getMiddle());
 			
+			//print value of User LastName
 			System.out.println("LastName");
 			System.out.println(user.getLast());
 			System.out.println(testUser.getLast());
 			
+			//print value of Address
 			System.out.println("Address");
 			System.out.println(user.getAddress());
 			System.out.println(testUser.getAddress());
 			
+			//print value of LoginID
 			System.out.println("LoginID");
 			System.out.println(user.getLoginID());
 			System.out.println(testUser.getLoginID());
 			
+			//print value of Password
 			System.out.println("Password");
 			System.out.println(user.getPassword());
 			System.out.println(testUser.getPassword());
 			
+			//print value of CreateDate
 			System.out.println("CreateDate");
 			System.out.println(user.getCreateDate());
 			System.out.println(testUser.getCreateDate());
 			
+			//print value of TimeStamp
 			System.out.println("TimeStamp");
 			System.out.println(user.getTimeStamp());
 			System.out.println(testUser.getTimeStamp());
 			
+			//print value of Gender
 			System.out.println("Gender");
 			System.out.println(user.getGender());
 			System.out.println(testUser.getGender());
 			
+			//print value of Email
 			System.out.println("Email");
 			System.out.println(user.getEmail());
 			System.out.println(testUser.getEmail());
 			
+			//print value of Phone
 			System.out.println("Phone");
 			System.out.println(user.getPhone());
 			System.out.println(testUser.getPhone());
@@ -95,22 +106,27 @@ public class testSQL {
 			System.out.println(user.getCell());
 			System.out.println(testUser.getCell());
 			
+			//print value of Country
 			System.out.println("Country");
 			System.out.println(user.getCountry());
 			System.out.println(testUser.getCountry());
 			
+			//print value of State		
 			System.out.println("State");
 			System.out.println(user.getState());
 			System.out.println(testUser.getState());
 			
+			//print value of ZipCode			
 			System.out.println("ZipCode");
 			System.out.println(user.getZip());
 			System.out.println(testUser.getZip());
 			
+			//print value of SS
 			System.out.println("SocialSecurity");
 			System.out.println(user.getSocialSecurity());
 			System.out.println(testUser.getSocialSecurity());
 			
+			//print value of DateOfBirth
 			System.out.println("DateOfBirth");
 			System.out.println(user.getDOB());
 			System.out.println(testUser.getDOB());

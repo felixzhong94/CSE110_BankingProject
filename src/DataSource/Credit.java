@@ -234,31 +234,44 @@ public class Credit implements Account{
 	}
 
 	public double calculateInterest() {
-
-		double returnValue = 0;
-		double fullValue =0;
+		double returnValue =0;
+		boolean firstInterest =false;
+		boolean secondInterest =false;
+		boolean thirdInterest =false;
 		long day = 30*60*60*24*1000;
 		for(int i=0;i<records.size();i++){
-			long timeDiff=records.get(i).getTimeStamp().getTime()-day;
-			long diffDays = timeDiff / (1000 * 60 * 60 * 24);
+			//long timeDiff=records.get(i).getTimeStamp().getTime()-day;
+			//long diffDays = timeDiff / (1000 * 60 * 60 * 24);
 			if(records.get(i).getBalance()<1000){
 				continue;
 				
 			}
-			else if((records.get(i).getBalance()>=1000)&&(records.get(i).getBalance()<2000)){
-				returnValue =(balance*0.01)*diffDays;
+			 if((records.get(i).getBalance()>=1000)&&(records.get(i).getBalance()<2000)){
+				//returnValue =(balance*0.01)*diffDays;
+				firstInterest =true;
 			}
-			else if((records.get(i).getBalance()>=2000)&&(records.get(i).getBalance()<3000)){
-				returnValue =(balance*0.02)*diffDays;
+			 if((records.get(i).getBalance()>=2000)&&(records.get(i).getBalance()<3000)){
+				//returnValue =(balance*0.02)*diffDays;
+				 secondInterest = true;
 			}
-			else if((records.get(i).getBalance()>=3000)){
-				returnValue =(balance*0.03)*diffDays;
+			 if((records.get(i).getBalance()>=3000)){
+				//returnValue =(balance*0.03)*diffDays;
+				 thirdInterest =true;
 			}
-			fullValue =fullValue+returnValue;
+			//fullValue =fullValue+returnValue;
 			
-			day = records.get(i).getTimeStamp().getTime();
+			//day = records.get(i).getTimeStamp().getTime();
 		}
-		returnValue = fullValue/30;
+		if(firstInterest ==true){
+			returnValue =balance*0.01;
+		}
+		else if(secondInterest ==true){
+			returnValue =balance*0.02;
+		}
+		else if(thirdInterest ==true){
+			returnValue =balance*0.03;
+		}
+		//returnValue = fullValue/30;
 		balance =balance+returnValue;
 		return returnValue;
 	}

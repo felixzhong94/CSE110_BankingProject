@@ -1,3 +1,12 @@
+/*
+ ActionRule
+ Set up different action rules to account:
+ Freeze or close or reactivate an account.
+ Check the status of the account.
+ Apply interest rules.
+ Check the amount limits of an account.
+ 
+ */
 package Rules;
 
 import java.sql.Connection;
@@ -14,24 +23,16 @@ public class ActionRule {
 	private static final int CLOSED = -1;
 
 	private Account account;
-	
+	// construct an actionrule with an account
 	public ActionRule(Account account) {
-		// TODO Auto-generated constructor stub
 		this.account = account;
 	}
-	
+	// check if it is closed
 	public boolean CanLogin() {
 		return (account.getAccountStatus() != CLOSED);
 	}
 	
-	/*public boolean CanCredit(double amount, TransactionRules transactionrule) {
-		return (account.getAccountStatus() == ACTIVE && transactionrule.canCredit(amount));
-	}
-	
-	public boolean CanDebit(double amount, TransactionRules transactionrule) {
-		return (account.getAccountStatus() == ACTIVE && transactionrule.canDedit(amount));
-	}*/
-	
+	// freeze an account
 	public boolean FreezeAccount(){
 		if(account.getAccountStatus() != FROZEN){
 			account.setAccountStauts(FROZEN);
@@ -40,7 +41,8 @@ public class ActionRule {
 		else
 			return false;
 	}
-	
+    
+	// close an account
 	public boolean CloseAccount(){
 		if(account.getAccountStatus() != CLOSED){
 			account.setAccountStauts(CLOSED);
@@ -50,6 +52,7 @@ public class ActionRule {
 			return false;
 	}
 	
+    // reacitivate an account
 	public boolean ReactivateAccount(){
 		if(account.getAccountStatus() != ACTIVE){
 			account.setAccountStauts(ACTIVE);
@@ -59,20 +62,25 @@ public class ActionRule {
 			return false;
 	}
 
+    // apply interest rules
 	public void ApplyInterest(InterestRules interestrule) {
-		// TODO Auto-generated method stub
 		if(account.getAccountStatus() == ACTIVE)
 			interestrule.ApplyInterest();
 	}
+    
+    // check if it is freezed
 	public boolean CheckFreezeAccount(){
 		return account.getAccountStatus() == FROZEN;
 	}
+    
+    // check if it is closed
 	public boolean CheckClosedAccount(){
 		return account.getAccountStatus() == CLOSED;
 	}
+    
+    // check the amount limits of an account
 	public boolean amountLimits(Connection conn,int accountNo){
 		String query = "select sum(Balance) as amount from Records where DATE(TimeStamp) =CURDATE() AND AccountNo = ?";
-		//Record record =new Record();
 		PreparedStatement statement;
 		double amount = 0;
 		try {
@@ -85,7 +93,6 @@ public class ActionRule {
 			}
 
 			}catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return false;
 			}
@@ -96,6 +103,8 @@ public class ActionRule {
 		return true;
 		
 	}
+    
+    // check the amount of an account
 	public boolean amountChecking(double amount){
 		return amount<=10000;
 	}

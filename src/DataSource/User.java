@@ -1,5 +1,9 @@
-package DataSource;
+/*
+ This class is a type of user
+ This class implements type AccountHolder
 
+ */
+package DataSource;
 
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -16,9 +20,9 @@ public class User implements AccountHolder{
 	private String email,phone,cell,country,state,zip,socialSecurity;
 	private Date createDate, timeStamp,DOB;
 	private ArrayList<Account> accounts=new ArrayList<Account>();
-
 	private java.sql.Timestamp date = new java.sql.Timestamp(new java.util.Date().getTime());
 	
+	//accessors and mutator
 	public String getFirst () {
 		return first;
 	}
@@ -142,7 +146,6 @@ public class User implements AccountHolder{
 	}
 	
 	public void setcreateDate (Date date)  {
-		
 		createDate= date;
 	}
 	public Date getTimeStamp () {
@@ -150,17 +153,28 @@ public class User implements AccountHolder{
 	}
 	
 	public void setTimeStamp (Date date)  {
-		
 		timeStamp= date;
 	}
+	
 	public void setAccounts(ArrayList<Account> accounts){
 		this.accounts =accounts;
 	}
+	
 	public ArrayList<Account> getAccounts(){
 		return accounts;
 	}
-	public boolean update(Connection conn){
+		
+	public ArrayList<Account> getUserAccounts(){
+		return accounts;
+	}
 	
+	//clears account attached to this user
+	public void accountsCleaner(){
+		accounts.clear();
+	}
+	
+	//update database of user with current LoginID and password with current fields
+	public boolean update(Connection conn){
 		String query = "UPDATE User SET FirstName = ?, MiddleName = ?, LastName=?,Address = ?, Password= ?,TimeStamp=?,Gender=?,Email=?,Phone=?,Cell=?,Country=?,State=?,ZipCode=? ,SocialSecurity=?,DateOfBirth=?WHERE  LoginID = ? AND Password =? ";
 		PreparedStatement preparedStmt;
 		try {
@@ -185,12 +199,13 @@ public class User implements AccountHolder{
 			preparedStmt.execute();
 			preparedStmt.close();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return false;
 		}
 		return true;
 	}
+	
+	//create new User in database with current fields
 	public boolean create(Connection conn){
 		String query = " insert into User (FirstName,MiddleName, LastName,Address, LoginID,Password,CreateDate,TimeStamp,Gender,Email,Phone,Cell,Country,State,ZipCode,SocialSecurity,DateOfBirth)"
 	       + " values (?, ?, ?, ?, ?,?, ?,?,?, ?, ?, ?, ?,?, ?,?,?)";
@@ -215,23 +230,20 @@ public class User implements AccountHolder{
 			preparedStmt.setString(16, this.getSocialSecurity());
 			preparedStmt.setDate(17,this.getDOB());
 			preparedStmt.execute();
-
 			preparedStmt.close();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			System.err.println("Login ID has been registered");
 			return false;
 		}
 		return true;	
 	}
 	
-	
+	//get user details from database
 	public boolean view(Connection conn){
 		String query = "select * from User where  Password =? AND LoginID=?";
 		PreparedStatement statement;
 		try {
 			statement = conn.prepareStatement(query);
-			//statement.setString(1, this.getLoginID());
 			statement.setString(1, this.getPassword());
 			statement.setString(2, this.getLoginID());
 			ResultSet table = statement.executeQuery();
@@ -242,7 +254,6 @@ public class User implements AccountHolder{
 		        this.setAddress( table.getString("Address"));
 		        this.setLoginID( table.getString("LoginID"));
 		        this.setPassword( table.getString("Password"));
-		        //System.out.println(password);
 		        this.setcreateDate( table.getDate("CreateDate"));
 		        this.setTimeStamp(table.getDate("TimeStamp"));
 		        this.setGender(table.getString("Gender"));
@@ -261,16 +272,14 @@ public class User implements AccountHolder{
 				System.out.println("2");
 				return false;
 			}
-			}catch (SQLException e) {
-			// TODO Auto-generated catch block
-				System.out.println("3");
+		}catch (SQLException e) {
+			System.out.println("3");
 			e.printStackTrace();
 			return false;
-			}    
-
-	        
-
+		}
 	}
+	
+	//get account details from database
 	public int viewAccount(Connection conn){
 		String query="select * from Account where UserLoginID = ?";
 		PreparedStatement statement;
@@ -295,24 +304,14 @@ public class User implements AccountHolder{
 		        account.setTimeStamp ( table.getDate("timeStamp"));
 		        accounts.add(account);
 			}
-			}catch (SQLException e) {
-			// TODO Auto-generated catch block
+		}catch (SQLException e) {
 			e.printStackTrace();
 			return 0;
-			}    
-
-			return accounts.size();
-		
-	}
-	public ArrayList<Account> getUserAccounts(){
-		
-		return accounts;
-		
-	}
-	public void accountsCleaner(){
-		accounts.clear();
+		}    
+		return accounts.size();	
 	}
 
+	//update password in case of password reset
 	public boolean updatePassword(Connection conn,String password,String LoginID){
 		String query = "UPDATE User SET  Password= ? WHERE  LoginID = ?";
 		PreparedStatement preparedStmt;

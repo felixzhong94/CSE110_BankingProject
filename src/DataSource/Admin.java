@@ -1,3 +1,8 @@
+/*
+ This class is a type of user
+ This class implements type AccountHolder
+
+ */
 package DataSource;
 
 import java.sql.Connection;
@@ -21,10 +26,10 @@ public class Admin implements AccountHolder{
 	private String email;
 	private java.sql.Timestamp date = new java.sql.Timestamp(new java.util.Date().getTime());
 	private ArrayList<Account> accounts=new ArrayList<Account>();
-
+	
+	//accessors and mutator
 	@Override
 	public String getLoginID() {
-		// TODO Auto-generated method stub
 		return loginID;
 	}
 
@@ -36,7 +41,6 @@ public class Admin implements AccountHolder{
 
 	@Override
 	public String getGender() {
-		// TODO Auto-generated method stub
 		return gender;
 	}
 
@@ -48,7 +52,6 @@ public class Admin implements AccountHolder{
 
 	@Override
 	public String getPhone() {
-		// TODO Auto-generated method stub
 		return phone;
 	}
 
@@ -60,7 +63,6 @@ public class Admin implements AccountHolder{
 
 	@Override
 	public String getPassword() {
-		// TODO Auto-generated method stub
 		return passWord;
 	}
 
@@ -72,41 +74,103 @@ public class Admin implements AccountHolder{
 
 	@Override
 	public Date getCreateDate() {
-		// TODO Auto-generated method stub
 		return createDate;
 	}
 
 	@Override
 	public void setcreateDate(Date date) {
-		// TODO Auto-generated method stub
 		createDate =date;
 	}
 
 	@Override
 	public Date getTimeStamp() {
-		// TODO Auto-generated method stub
 		return timeStamp;
 	}
 
 	@Override
 	public void setTimeStamp(Date date) {
-		// TODO Auto-generated method stub
 		timeStamp = date;
 	}
 
 	@Override
 	public void setAccounts(ArrayList<Account> accounts) {
 		this.accounts =accounts;
-		
 	}
 
 	@Override
 	public ArrayList<Account> getAccounts() {
-		// TODO Auto-generated method stub
 		return accounts;
 	}
 	
+	public String getBranch() {
+		return branch;
+	}
 
+	public void setBranch(String input) {
+		branch = input;	
+	}
+	
+	public String getDepartment() {
+		return branch;
+	}
+
+	public void setDepartment(String input) {
+		department = input;
+	}
+	
+	public String getWorkingID() {
+		return workingID;
+	}
+
+	public void setWorkingID(String input) {
+		workingID = input;	
+	}
+
+	@Override
+	public String getFirst() {
+		return first;
+	}
+
+	@Override
+	public void setFirst(String input) {
+		first = input;
+	}
+
+	@Override
+	public String getMiddle() {
+		return middle;
+	}
+
+	@Override
+	public void setMiddle(String input) {
+		middle = input;	
+	}
+
+	@Override
+	public String getLast() {
+		return null;
+	}
+
+	@Override
+	public void setLast(String input) {
+		last = input;
+		
+	}
+	public void accountsCleaner(){
+		accounts.clear();
+	}
+
+	@Override
+	public String getEmail() {	
+		return email;
+	}
+
+	@Override
+	public void setEmail(String input) {
+		email = input;
+	}
+	
+	//update database of user with current LoginID and password with current fields
 	@Override
 	public boolean update(Connection conn) {
 		String query = "UPDATE Admin SET FirstName = ?, MiddleName = ?, LastName=?, Password= ?,TimeStamp=?,Gender=?,Branch=?,Department=?,Phone=?,WorkingID=?,WHERE  LoginID = ? AND Password =? ";
@@ -125,17 +189,15 @@ public class Admin implements AccountHolder{
 			preparedStmt.setString(10,this.getPhone());
 			preparedStmt.setString(11, this.getWorkingID());
 			preparedStmt.execute();
-
 			preparedStmt.close();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			System.err.println("Login ID has been registered");
 			return false;
 		}
 		return true;	
-
 	}
 
+	//create new Admin user in database with current fields
 	@Override
 	public boolean create(Connection conn)  {
 		String query = " insert into Admin (FirstName,MiddleName, LastName, LoginID,Password,CreateDate,TimeStamp,Gender,Branch,Department,Phone,WorkingID,Email)"
@@ -157,10 +219,8 @@ public class Admin implements AccountHolder{
 					preparedStmt.setString(12, this.getWorkingID());
 					preparedStmt.setString(13, this.getEmail());
 					preparedStmt.execute();
-
 					preparedStmt.close();
 				} catch (SQLException e) {
-					// TODO Auto-generated catch block
 					System.err.println("Login ID has been registered");
 					return false;
 				}
@@ -168,6 +228,7 @@ public class Admin implements AccountHolder{
 
 	}
 
+	//get account details from database
 	@Override
 	public boolean view(Connection conn) {
 		String query = "select * from Admin where LoginID = ? and Password =?";
@@ -198,108 +259,19 @@ public class Admin implements AccountHolder{
 				System.out.println("2");
 				return false;
 			}
-			}catch (SQLException e) {
-			// TODO Auto-generated catch block
-				System.out.println("3");
+		}catch (SQLException e) {
+			System.out.println("3");
 			e.printStackTrace();
 			return false;
-			}  
+		}  
 	}
 
-
-	
-	public String getBranch() {
-		// TODO Auto-generated method stub
-		return branch;
-	}
-
-	
-	public void setBranch(String input) {
-		branch = input;
-		
-	}
-	
-	public String getDepartment() {
-		// TODO Auto-generated method stub
-		return branch;
-	}
-
-	
-	public void setDepartment(String input) {
-		department = input;
-		
-	}
-	
-	public String getWorkingID() {
-		// TODO Auto-generated method stub
-		return workingID;
-	}
-
-	
-	public void setWorkingID(String input) {
-		workingID = input;
-		
-	}
-
-	@Override
-	public String getFirst() {
-		// TODO Auto-generated method stub
-		return first;
-	}
-
-	@Override
-	public void setFirst(String input) {
-		first = input;
-		
-	}
-
-	@Override
-	public String getMiddle() {
-		// TODO Auto-generated method stub
-		return middle;
-	}
-
-	@Override
-	public void setMiddle(String input) {
-		middle = input;
-		
-	}
-
-	@Override
-	public String getLast() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void setLast(String input) {
-		last = input;
-		
-	}
-	public void accountsCleaner(){
-		accounts.clear();
-	}
-
-	@Override
-	public String getEmail() {
-		
-		return email;
-	}
-
-	@Override
-	public void setEmail(String input) {
-		email = input;
-		
-	}
-
-	
-
+	//get user details from database
 	public int viewAccount(Connection conn){
 		String query="select * from Account ";
 		PreparedStatement statement;
 		try {
 			statement = conn.prepareStatement(query);
-			//statement.setString(1, getLoginID ());
 			ResultSet table = statement.executeQuery();	
 			while(table.next()){
 				Account account = null;
@@ -318,13 +290,11 @@ public class Admin implements AccountHolder{
 		        account.setTimeStamp ( table.getDate("timeStamp"));
 		        accounts.add(account);
 			}
-			}catch (SQLException e) {
-			// TODO Auto-generated catch block
+		}catch (SQLException e) {
 			e.printStackTrace();
 			return 0;
-			}    
-
-			return accounts.size();
+		}    
+		return accounts.size();
 		
 	}
 

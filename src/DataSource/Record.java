@@ -1,3 +1,9 @@
+/*
+ This class is record data structure that sores information about all
+ transactions
+
+ */
+
 package DataSource;
 
 import java.sql.Connection;
@@ -15,9 +21,12 @@ public class Record {
 	private int type;
 	private Date timeStamp;
 	private java.sql.Timestamp date = new java.sql.Timestamp(new java.util.Date().getTime());
+	
+	//accessors and mutator
 	public void setAccountNo(int input){
 		AccountNo= input;
 	}
+	
 	public int getAccountNo(){
 		return AccountNo;
 	}
@@ -25,39 +34,52 @@ public class Record {
 	public void setDebit(double input){
 		debit = input;
 	}
+	
 	public double getDebit(){
 		return debit;
 	}
+	
 	public void setCredit(double input){
 		credit = input;
 	}
+	
 	public double getCredit(){
 		return credit;
 	}
+	
 	public void setBalance(double input){
 		balance = input;
 	}
+	
 	public double getBalance(){
 		return balance;
 	}
+	
 	public void setAuthority(int input){
 		authority = input;
 	}
+	
 	public int getAuthority(){
 		return authority;
 	}
+	
 	public void setType(int input){
 		type = input;
 	}
+	
 	public int getType(){
 		return type;
 	}
+	
 	public void setTimeStamp(Date input){
 		timeStamp = input;
 	}
+	
 	public Date getTimeStamp(){
 		return timeStamp;
 	}
+	
+	//insert record into the database
 	public boolean insertRecord(Connection conn){
 		String query = " insert into Records (AccountNo,Credit, Debit,Balance, Timestamp,Authority,Type)"
 			       + " values (?, ?, ?, ?, ?,?, ?)";
@@ -83,5 +105,5 @@ public class Record {
 				return true;
 	}
 
-	}
+}
 

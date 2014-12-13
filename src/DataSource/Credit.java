@@ -1,3 +1,9 @@
+/*
+ This class is a type of account 
+ This class implements type Account
+
+ */
+
 package DataSource;
 
 import java.sql.Connection;
@@ -15,14 +21,9 @@ import Rules.CreditAccountTransactionRule;
 import Rules.InterestRules;
 import Rules.TransactionRules;
 
-/**
- * @author felix
- *
- */
 public class Credit implements Account{
 	
 	private static final int CREDIT =1;
-
 	
 	private int accountNo = 0; 
 	private double balance = 0.0;
@@ -33,10 +34,13 @@ public class Credit implements Account{
 	private java.sql.Timestamp date = new java.sql.Timestamp(today);
 	private int accountStatus ;
 	
+	//composition of rules and records which apply to this account
 	public TransactionRules tranactionrule = new CreditAccountTransactionRule(this,0);
 	public InterestRules interestrule = new CheckingAccountInterestRule(this);
 	public ActionRule actionrule = new ActionRule(this);
 	private ArrayList<Record> records = new ArrayList<Record>();
+	
+	//accessors and modifier
 	@Override
 	public int getAccountNo () {
 		return accountNo;
@@ -67,9 +71,7 @@ public class Credit implements Account{
 	public void setLoginID (String input) {
 		loginID = input;
 	}
-	
 
-	
 	@Override
 	public int getAccountType () {
 		return accountType;
@@ -81,22 +83,12 @@ public class Credit implements Account{
 	}
 	
 	@Override
-	public int accountNoGenerator(){
-		int n = (int)Math.floor( Math.random() * 100000 + 1 );
-		NumberFormat formatter = new DecimalFormat("00000");
-		String number = formatter.format(n);
-		System.out.println("Number with lading zeros: " + number);
-		return Integer.parseInt(number);
-	}
-	
-	@Override
 	public Date getCreateDate () {
 		return createDate;
 	}
 	
 	@Override
 	public void setcreateDate (Date date)  {
-		
 		createDate= date;
 	}
 	
@@ -111,6 +103,33 @@ public class Credit implements Account{
 		timeStamp= date;
 	}
 	
+	@Override
+	public int getAccountStatus() {
+		return accountStatus;
+	}
+
+	@Override
+	public void setAccountStauts(int input) {
+		accountStatus = input;
+	}
+		
+	@Override
+	public ArrayList<Record> getRecords() {
+		return records;
+	}
+	
+	//generated new account number for opening account
+	@Override
+	public int accountNoGenerator(){
+		int n = (int)Math.floor( Math.random() * 100000 + 1 );
+		NumberFormat formatter = new DecimalFormat("00000");
+		String number = formatter.format(n);
+		System.out.println("Number with lading zeros: " + number);
+		return Integer.parseInt(number);
+	}
+	
+	
+	//updates database 
 	@Override
 	public void update(Connection conn){
 		
@@ -127,13 +146,13 @@ public class Credit implements Account{
 				preparedStmt.executeUpdate();
 				preparedStmt.close();
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 
 		
 	}
 	
+	//create new account in database
 	@Override
 	public void create(Connection conn) {
 		String query = " insert into Account (UserLoginID,AccountNo, AccountType, Balance, OpenDate,timeStamp,AccountStatus)"
@@ -157,47 +176,25 @@ public class Credit implements Account{
 		}
 
 	}
+	
+	//checks and modifier for account balance
 	public boolean checkBalance(double amount){
 		return balance >=amount;
 	}
+	
 	public double credit(double amount){
 		balance = balance +amount;
 		return balance;
 	}
+	
 	public double debit(double amount){
 		balance = balance -amount;
-		return amount;
-		
+		return amount;	
 	}
 
-	@Override
-	public int getAccountStatus() {
-		// TODO Auto-generated method stub
-		return accountStatus;
-	}
-
-	@Override
-	public void setAccountStauts(int input) {
-		accountStatus = input;
-		
-	}
-
-	/*@Override
-	public boolean CanCredit(double amount) {
-		// TODO Auto-generated method stub
-		return actionrule.CanDebit(amount, tranactionrule);
-	}
-
-	@Override
-	public boolean CanDedit(double amount) {
-		// TODO Auto-generated method stub
-		return actionrule.CanCredit(amount, tranactionrule);
-	}*/
-
-
+	//get all records of this account from database
 	public ArrayList<Record> viewRecords(Connection conn){
 		String query = "select * from Records where AccountNo = ?";
-		//Record record =new Record();
 		PreparedStatement statement;
 		
 		try {
@@ -222,17 +219,10 @@ public class Credit implements Account{
 			e.printStackTrace();
 			return null;
 			}
-		return records;    
-
-		
+		return records;    	
 	}
 
-	@Override
-	public ArrayList<Record> getRecords() {
-		// TODO Auto-generated method stub
-		return records;
-	}
-
+	//applies interest to account
 	public double calculateInterest() {
 		double returnValue =0;
 		boolean firstInterest =false;
@@ -240,27 +230,18 @@ public class Credit implements Account{
 		boolean thirdInterest =false;
 		long day = 30*60*60*24*1000;
 		for(int i=0;i<records.size();i++){
-			//long timeDiff=records.get(i).getTimeStamp().getTime()-day;
-			//long diffDays = timeDiff / (1000 * 60 * 60 * 24);
 			if(records.get(i).getBalance()<1000){
 				continue;
-				
 			}
 			 if((records.get(i).getBalance()>=1000)&&(records.get(i).getBalance()<2000)){
-				//returnValue =(balance*0.01)*diffDays;
 				firstInterest =true;
 			}
 			 if((records.get(i).getBalance()>=2000)&&(records.get(i).getBalance()<3000)){
-				//returnValue =(balance*0.02)*diffDays;
 				 secondInterest = true;
 			}
 			 if((records.get(i).getBalance()>=3000)){
-				//returnValue =(balance*0.03)*diffDays;
 				 thirdInterest =true;
 			}
-			//fullValue =fullValue+returnValue;
-			
-			//day = records.get(i).getTimeStamp().getTime();
 		}
 		if(firstInterest ==true){
 			returnValue =balance*0.01;
@@ -271,17 +252,15 @@ public class Credit implements Account{
 		else if(thirdInterest ==true){
 			returnValue =balance*0.03;
 		}
-		//returnValue = fullValue/30;
 		balance =balance+returnValue;
 		return returnValue;
 	}
 
+	//get record of last 30 days from database
 	@Override
 	public ArrayList<Record> ThirtyDaysRecords(Connection conn) {
 		String query = "select * from Records where Date( TimeStamp)>= ( CURDATE() - INTERVAL 10 DAY ) AND AccountNo = ?";
-		//Record record =new Record();
-		PreparedStatement statement;
-		
+		PreparedStatement statement;		
 		try {
 			statement = conn.prepareStatement(query);
 			statement.setInt(1, this.getAccountNo());
@@ -297,16 +276,14 @@ public class Credit implements Account{
 				record.setTimeStamp(table.getDate("TimeStamp"));
 		        records.add(record);
 			}
-
 			}catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return null;
+				e.printStackTrace();
+				return null;
 			}
 		return records;    
-
 	}
 
+	//applies appropriate interest or penalty
 	@Override
 	public double compute() {
 		boolean penalty = false;

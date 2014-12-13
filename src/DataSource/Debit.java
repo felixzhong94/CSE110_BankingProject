@@ -1,3 +1,9 @@
+/*
+ This class is a type of account 
+ This class implements type Account
+
+ */
+ 
 package DataSource;
 
 import java.sql.Connection;
@@ -29,12 +35,12 @@ public class Debit implements Account {
 	private int accountStatus ;	
 	private ArrayList<Record> records = new ArrayList<Record>();
 	
-	
-	
+	//composition of rules and records which apply to this account
 	public TransactionRules tranactionrule = new DeditAccountTransactionRule(this,0);
 	public InterestRules interestrule = new CheckingAccountInterestRule(this);
 	public ActionRule actionrule = new ActionRule(this);
 	
+	//accessors and modifier
 	@Override
 	public int getAccountNo () {
 		return accountNo;
@@ -57,7 +63,6 @@ public class Debit implements Account {
 	
 	@Override
 	public String getLoginID () {
-		
 		return loginID;
 	}
 	
@@ -77,22 +82,12 @@ public class Debit implements Account {
 	}
 	
 	@Override
-	public int accountNoGenerator(){
-		int n = (int)Math.floor( Math.random() * 100000 + 1 );
-		NumberFormat formatter = new DecimalFormat("00000");
-		String number = formatter.format(n);
-		System.out.println("Number with lading zeros: " + number);
-		return Integer.parseInt(number);
-	}
-	
-	@Override
 	public Date getCreateDate () {
 		return createDate;
 	}
 	
 	@Override
 	public void setcreateDate (Date date)  {
-		
 		createDate= date;
 	}
 	
@@ -103,10 +98,35 @@ public class Debit implements Account {
 	
 	@Override
 	public void setTimeStamp (Date date)  {
-		
 		timeStamp= date;
 	}
 	
+	@Override
+	public int getAccountStatus() {
+		return accountStatus;
+	}
+
+	@Override
+	public void setAccountStauts(int input) {
+		accountStatus = input;	
+	}
+	
+	@Override
+	public ArrayList<Record> getRecords() {
+		return records;
+	}
+	
+	//generated new account number for opening account
+	@Override
+	public int accountNoGenerator(){
+		int n = (int)Math.floor( Math.random() * 100000 + 1 );
+		NumberFormat formatter = new DecimalFormat("00000");
+		String number = formatter.format(n);
+		System.out.println("Number with lading zeros: " + number);
+		return Integer.parseInt(number);
+	}
+	
+	//updates database
 	@Override
 	public void update(Connection conn){
 		
@@ -123,13 +143,13 @@ public class Debit implements Account {
 				preparedStmt.executeUpdate();
 				preparedStmt.close();
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 
 		
 	}
 	
+	//create new account in database
 	@Override
 	public void create(Connection conn) {
 		String query = " insert into Account (UserLoginID,AccountNo, AccountType, Balance, OpenDate,timeStamp,AccountStatus)"
@@ -148,41 +168,29 @@ public class Debit implements Account {
 			preparedStmt.execute();
 			preparedStmt.close();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
 	}
+	
+	//checks and modifier for account balance
 	public boolean checkBalance(double amount){
 		return balance >=amount;
 	}
+	
 	public double credit(double amount){
 		balance = balance +amount;
 		return balance;
 	}
+	
 	public double debit(double amount){
 		balance = balance -amount;
 		return amount;
-		
-	}
-	@Override
-	public int getAccountStatus() {
-		// TODO Auto-generated method stub
-		return accountStatus;
 	}
 
-	@Override
-	public void setAccountStauts(int input) {
-		accountStatus = input;
-		
-	}
-	
-
-
-
+	//get all records of this account from database
 	public ArrayList<Record> viewRecords(Connection conn){
 		String query = "select * from Records where AccountNo = ?";
-		//Record record =new Record();
 		PreparedStatement statement;
 		
 		try {
@@ -202,7 +210,6 @@ public class Debit implements Account {
 			}
 
 			}catch (SQLException e) {
-			// TODO Auto-generated catch block
 				System.out.println("3");
 			e.printStackTrace();
 			return null;
@@ -212,12 +219,7 @@ public class Debit implements Account {
 		
 	}
 
-	@Override
-	public ArrayList<Record> getRecords() {
-		
-		return records;
-	}
-
+	//applies interest to account
 	@Override
 	public double calculateInterest() {
 		double returnValue =0;
@@ -229,18 +231,14 @@ public class Debit implements Account {
 
 			if(records.get(i).getBalance()<1000){
 				continue;
-				
 			}
 			 if((records.get(i).getBalance()>=1000)&&(records.get(i).getBalance()<2000)){
-				//returnValue =(balance*0.01)*diffDays;
 				firstInterest =true;
 			}
 			 if((records.get(i).getBalance()>=2000)&&(records.get(i).getBalance()<3000)){
-				//returnValue =(balance*0.02)*diffDays;
 				 secondInterest = true;
 			}
 			 if((records.get(i).getBalance()>=3000)){
-				//returnValue =(balance*0.03)*diffDays;
 				 thirdInterest =true;
 			}
 
@@ -254,18 +252,15 @@ public class Debit implements Account {
 		else if(thirdInterest ==true){
 			returnValue =balance*0.04;
 		}
-	
 		balance =balance+returnValue;
 		return returnValue;
 	}
 	
-
+	//get record of last 30 days from database
 	@Override
 	public ArrayList<Record> ThirtyDaysRecords(Connection conn) {
 		String query = "select * from Records where DATE(TimeStamp)>= ( CURDATE() - INTERVAL 10 DAY ) AND AccountNo = ?";
-		//Record record =new Record();
 		PreparedStatement statement;
-		
 		try {
 			statement = conn.prepareStatement(query);
 			statement.setInt(1, this.getAccountNo());
@@ -281,16 +276,14 @@ public class Debit implements Account {
 				record.setTimeStamp(table.getDate("TimeStamp"));
 		        records.add(record);
 			}
-
 			}catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return null;
+				e.printStackTrace();
+				return null;
 			}
 		return records;    
-
 	}
 
+	//applies appropriate interest or penalty
 	@Override
 	public double compute() {
 		boolean penalty = false;
